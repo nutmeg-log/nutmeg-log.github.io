@@ -27,8 +27,8 @@ layout: default
             </a>
         </div>
         
-        <!-- 상세 페이지용 Cusdis 익명댓글 컨테이너 -->
-        <div id="post-cusdis-root" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <!-- 클래스명을 고유값(cusdis-wrapper)으로 변경하여 기존 CSS display:none 강제 적용 충돌 해결 -->
+        <div id="post-cusdis-root" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
 </div>
 
@@ -53,8 +53,6 @@ function togglePostCusdis(event) {
         thread.setAttribute('data-page-url', window.location.href);
         thread.setAttribute('data-page-title', '{{ page.title | escape }}');
         thread.setAttribute('data-theme', 'light');
-        
-        // 지킬 템플릿과 충돌을 방지하기 위해, 원격 호스팅된 라이트 테마 CSS를 지정
         thread.setAttribute('data-iframe-css', 'https://cusdis.com/js/style.css');
         
         container.appendChild(thread);
