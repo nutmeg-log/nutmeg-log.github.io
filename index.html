@@ -28,6 +28,7 @@ layout: default
             </a>
         </div>
         
+        <!-- 익명 댓글창이 제자리에서 열릴 컨테이너 -->
         <div id="giscus-container-{{ forloop.index }}" class="comment" style="margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
     {% endfor %}
@@ -65,6 +66,7 @@ layout: default
 </div>
 {% endif %}
 
+<!-- giscus 익명 댓글 토글 스크립트 -->
 <script>
 function toggleGiscus(event, postTitle, containerId) {
     event.preventDefault();
@@ -81,17 +83,17 @@ function toggleGiscus(event, postTitle, containerId) {
         var script = document.createElement('script');
         script.setAttribute('src', 'https://giscus.app/client.js');
         script.setAttribute('data-repo', 'nutmeg-log/nutmeg-log.github.io');
-        script.setAttribute('data-repo-id', 'R_kgDONG641g'); // 깃허브가 인식하는 저장소 고유 식별 ID
+        script.setAttribute('data-repo-id', 'R_kgDONG641g');
         script.setAttribute('data-category', 'Announcements');
-        script.setAttribute('data-category-id', 'DIC_kwDONG641s4CkWzB'); // 디스커션 카테고리 고유 ID
+        script.setAttribute('data-category-id', 'DIC_kwDONG641s4CkWzB');
         script.setAttribute('data-mapping', 'specific');
         script.setAttribute('data-term', postTitle);
         script.setAttribute('data-strict', '0');
-        script.setAttribute('data-reactions-enabled', '1');
+        script.setAttribute('data-reactions-enabled', '0'); // 이모지 반응 기능 완전 비활성화 (0)
         script.setAttribute('data-emit-metadata', '0');
         script.setAttribute('data-input-position', 'top');
         script.setAttribute('data-theme', 'light');
-        script.setAttribute('data-lang', 'ko'); // 한국어 기본 설정
+        script.setAttribute('data-lang', 'ko');
         script.setAttribute('crossorigin', 'anonymous');
         script.setAttribute('async', 'true');
         
