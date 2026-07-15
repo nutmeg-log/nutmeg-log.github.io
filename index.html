@@ -3,11 +3,13 @@ layout: default
 ---
 
 <style>
-    /* Waline 댓글창에서 입력창과 등록 버튼만 남기고 불필요한 요소 모두 숨김 처리 */
+    /* Waline 댓글창에서 입력창(wl-panel)만 남기고 나머지 모든 요소를 강제로 숨깁니다 */
     .wl-cards,       /* 댓글 목록 */
-    .wl-header,      /* 새로고침, RSS 피드 버튼 영역 */
-    .wl-meta-head,   /* 댓글 개수 등 메타 정보 */
+    .wl-count,       /* 댓글 개수, 새로고침, 피드 버튼이 포함된 영역 */
+    .wl-meta-head,   /* 메타 정보 헤더 */
+    .wl-header,      /* 구버전 헤더 영역 */
     .wl-pagination,  /* 페이지네이션 */
+    .wl-empty,       /* '댓글이 없습니다' 등의 빈 상태 텍스트 */
     .wl-power        /* Powered by Waline 텍스트 */ {
         display: none !important;
     }
