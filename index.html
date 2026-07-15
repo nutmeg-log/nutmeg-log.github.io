@@ -23,45 +23,52 @@ layout: default
         
         <div class="actionTrail" style="cursor: pointer;">
             <i class="fa fa-fw fa-comment"></i> 
-            <a href="#" onclick="toggleCusdis(event, '{{ forloop.index }}')">
+            <a href="#" onclick="toggleCusdis(event, '{{ post.title | escape }}', '{{ post.url | relative_url }}', 'cusdis-container-{{ forloop.index }}')">
                 <span class="cnt">comment</span>
             </a>
         </div>
         
-        <div id="cusdis-wrapper-{{ forloop.index }}" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
-            <div id="cusdis_thread"
-                 data-host="https://cusdis.com"
-                 data-app-id="bafad7eb-3b56-49d3-92de-f0212c4d5091"
-                 data-page-id="{{ post.url | relative_url }}"
-                 data-page-url="{{ site.url }}{{ post.url | relative_url }}"
-                 data-page-title="{{ post.title | escape }}"
-                 data-theme="light">
-            </div>
-        </div>
+        <div id="cusdis-container-{{ forloop.index }}" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
     {% endfor %}
 </div>
 
-<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
-
 <script>
-function toggleCusdis(event, index) {
+function toggleCusdis(event, postTitle, postUrl, containerId) {
     event.preventDefault();
-    
-    // 현재 클릭한 포스트의 래퍼만 타겟팅
-    var wrapper = document.getElementById('cusdis-wrapper-' + index);
-    if (!wrapper) return;
+    var container = document.getElementById(containerId);
+    if (!container) return;
 
-    // display 토글만 수행 (innerHTML을 절대 건드리지 않음 -> 사라짐 방지)
-    if (wrapper.style.display === "block") {
-        wrapper.style.display = "none";
-    } else {
-        // 모든 다른 댓글창을 닫고 하나만 엽니다
-        var allWrappers = document.querySelectorAll('.cusdis-wrapper');
-        for (var i = 0; i < allWrappers.length; i++) {
-            allWrappers[i].style.display = "none";
-        }
-        wrapper.style.display = "block";
+    if (container.style.display === "block") {
+        container.style.display = "none";
+        container.innerHTML = "";
+        return;
     }
+
+    // 다른 모든 댓글창 닫기
+    var allContainers = document.querySelectorAll('.comment');
+    for (var i = 0; i < allContainers.length; i++) {
+        allContainers[i].style.display = "none";
+        allContainers[i].innerHTML = "";
+    }
+
+    container.style.display = "block";
+    
+    // Cusdis 기본 로드
+    var thread = document.createElement('div');
+    thread.id = 'cusdis_thread';
+    thread.setAttribute('data-host', 'https://cusdis.com');
+    thread.setAttribute('data-app-id', 'bafad7eb-3b56-49d3-92de-f0212c4d5091'); 
+    thread.setAttribute('data-page-id', postUrl);
+    thread.setAttribute('data-page-url', '{{ site.url }}' + postUrl);
+    thread.setAttribute('data-page-title', postTitle);
+    thread.setAttribute('data-theme', 'light');
+    
+    container.appendChild(thread);
+    
+    var script = document.createElement('script');
+    script.src = 'https://cusdis.com/js/cusdis.es.js';
+    script.async = true;
+    container.appendChild(script);
 }
 </script>
