@@ -2,39 +2,56 @@
 layout: default
 ---
 
-<div class="post-wrapper">
-    <div class="post-header">
+<div class="mainElement entry">
+    <div class="titleWrap">
         <h2>{{ page.title }}</h2>
-        <div class="post-meta">
+        <div class="meta">
             {% if page.category %}
-            <span class="entryCategory">{{ page.category }}</span>
+            <a class="entryCategory" href="{{ site.baseurl }}/category/{{ page.category | slugify }}">{{ page.category }}</a> 
             {% endif %}
             <span class="date">
                 {{ page.date | date: "%B %d, %Y" }}
             </span>
         </div>
     </div>
-
-    <div class="post-content">
+    
+    <div class="article">
         {{ content }}
     </div>
-
-    {% if page.tags.size > 0 %}
-    <ul class="post-tags">
-        {% for tag in page.tags %}
-        <li><a href="{{ '/tags/#' | append: tag | relative_url }}">{{ tag }}</a></li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
-    <div class="comment" style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
-        <h3 style="font-size: 13px; font-weight: bold; margin-bottom: 15px;">Comments</h3>
-        <script src="https://utteranc.es/client.js"
-                repo="nutmeg-log/nutmeg-log.github.io"
-                issue-term="pathname"
-                theme="github-light"
-                crossorigin="anonymous"
-                async>
-        </script>
+    
+    <div class="actionTrail" style="cursor: pointer;">
+        <i class="fa fa-fw fa-comment"></i> 
+        <a href="#" onclick="togglePostComments(event)">
+            <span class="cnt">comment</span>
+        </a>
     </div>
+    
+    <div id="post-comments-root" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
 </div>
+
+<script>
+function togglePostComments(event) {
+    event.preventDefault(); // 페이지 튐 방지
+    
+    var container = document.getElementById('post-comments-root');
+    if (!container) return;
+
+    if (container.style.display === "block") {
+        container.style.display = "none";
+        return;
+    }
+
+    if (container.innerHTML === "") {
+        var script = document.createElement('script');
+        script.setAttribute('src', 'https://utteranc.es/client.js');
+        script.setAttribute('repo', 'nutmeg-log/nutmeg-log.github.io'); // 본인의 레포지토리 주소
+        script.setAttribute('issue-term', '{{ page.title | escape }}'); // 포스트 제목 기준으로 댓글 매칭
+        script.setAttribute('theme', 'github-light');
+        script.setAttribute('crossorigin', 'anonymous');
+        script.setAttribute('async', 'true');
+        container.appendChild(script);
+    }
+
+    container.style.display = "block";
+}
+</script>
