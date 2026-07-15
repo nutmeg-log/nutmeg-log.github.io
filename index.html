@@ -4,30 +4,32 @@ layout: default
 
 <div class="posts-list">
     {% for post in paginator.posts %}
-    <article class="post-wrapper" id="post-{{ forloop.index }}">
-        <header class="post-header">
+    <div class="mainElement entry" id="post-{{ forloop.index }}">
+        <div class="titleWrap">
+            <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
             <div class="meta">
                 {% if post.category %}
-                <span class="entryCategory">{{ post.category }}</span>
-                <span class="divider">•</span>
+                <a class="entryCategory" href="{{ post.url | relative_url }}">{{ post.category }}</a> 
                 {% endif %}
-                <span class="date">{{ post.date | date: "%Y. %m. %d" }}</span>
+                <span class="date">
+                    {{ post.date | date: "%B %d, %Y" }}
+                </span>
             </div>
-            <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-        </header>
+        </div>
         
-        <div class="post-content">
+        <div class="article">
             {{ post.content }}
         </div>
         
-        <footer class="post-footer">
-            <a href="#" class="comment-link" onclick="toggleComments(event, '{{ post.title | escape }}', 'comments-{{ forloop.index }}')">
-                <i class="fa fa-fw fa-comment"></i> 댓글 보기 / 쓰기
+        <div class="actionTrail" style="cursor: pointer;">
+            <i class="fa fa-fw fa-comment"></i> 
+            <a href="#" onclick="toggleComments(event, '{{ post.title | escape }}', 'comments-{{ forloop.index }}')">
+                <span class="cnt">comment</span>
             </a>
-            
-            <div id="comments-{{ forloop.index }}" class="post-comments-area" style="display: none; margin-top: 30px; padding-top: 20px; border-top: 1px solid #f1f1f1;"></div>
-        </footer>
-    </article>
+        </div>
+        
+        <div id="comments-{{ forloop.index }}" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+    </div>
     {% endfor %}
 </div>
 
@@ -35,61 +37,59 @@ layout: default
 <div class="paging">
     {% if paginator.previous_page %}
         {% if paginator.previous_page == 1 %}
-            <a href="{{ '/' | relative_url }}" class="prev-page"><i class="fa fa-angle-left"></i></a>
+            <a href="{{ '/' | relative_url }}" class="prev"><i class="fa fa-fw fa-angle-left fa-lg"></i></a>
         {% else %}
-            <a href="{{ paginator.previous_page_path | relative_url }}" class="prev-page"><i class="fa fa-angle-left"></i></a>
+            <a href="{{ paginator.previous_page_path | relative_url }}" class="prev"><i class="fa fa-fw fa-angle-left fa-lg"></i></a>
         {% endif %}
     {% else %}
-        <span class="prev-page disabled"><i class="fa fa-angle-left"></i></span>
+        <span class="prev" style="color:#ccc; cursor:default;"><i class="fa fa-fw fa-angle-left fa-lg"></i></span>
     {% endif %}
 
-    <span class="numbox">
+    <span class="numbox" style="margin: 0 15px;">
         {% for page in (1..paginator.total_pages) %}
             {% if page == paginator.page %}
-                <span class="num selected">{{ page }}</span>
+                <span class="num selected" style="font-weight: bold; margin: 0 5px;">{{ page }}</span>
             {% elsif page == 1 %}
-                <a href="{{ '/' | relative_url }}" class="num">{{ page }}</a>
+                <a href="{{ '/' | relative_url }}" class="num" style="margin: 0 5px;">{{ page }}</a>
             {% else %}
-                <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}" class="num">{{ page }}</a>
+                <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}" class="num" style="margin: 0 5px;">{{ page }}</a>
             {% endif %}
-         font-weight: 600;      {% endfor %}
+        {% endfor %}
     </span>
 
     {% if paginator.next_page %}
-        <a href="{{ paginator.next_page_path | relative_url }}" class="next-page"><i class="fa fa-angle-right"></i></a>
+        <a href="{{ paginator.next_page_path | relative_url }}" class="next"><i class="fa fa-fw fa-angle-right"></i>"</a>
     {% else %}
-        <span class="next-page disabled"><i class="fa fa-angle-right"></i></span>
+        <span class="next" style="color:#ccc; cursor:default;"><i class="fa fa-fw fa-angle-right fa-lg"></i></span>
     {% endif %}
 </div>
 {% endif %}
 
 <script>
 function toggleComments(event, postTitle, containerId) {
-    event.preventDefault(); // 기본 링크 이동 막기
+    event.preventDefault(); // 페이지 상단 튐 및 이동 방지
     
     var container = document.getElementById(containerId);
     if (!container) return;
 
-    // 만약 이미 열려있다면 토글하여 닫기
+    // 토글 처리 (열려있으면 닫기)
     if (container.style.display === "block") {
         container.style.display = "none";
         return;
     }
 
-    // 처음 여는 것이라면 Utterances 스크립트를 생성하여 주입
+    // 처음 클릭 시에만 안전하게 스크립트 객체를 로드하여 주입
     if (container.innerHTML === "") {
         var script = document.createElement('script');
         script.setAttribute('src', 'https://utteranc.es/client.js');
-        script.setAttribute('repo', 'nutmeg-log/nutmeg-log.github.io'); // 본인의 깃허브 저장소
-        script.setAttribute('issue-term', postTitle); // 주소창 URL 대신 포스트 제목(title)으로 매칭하여 충돌 방지
-        script.setAttribute('theme', 'github-light'); 
+        script.setAttribute('repo', 'nutmeg-log/nutmeg-log.github.io'); // 레포지토리 정보 매칭
+        script.setAttribute('issue-term', postTitle); // 메인화면 주소와 격리하기 위해 제목 기준 연결
+        script.setAttribute('theme', 'github-light');
         script.setAttribute('crossorigin', 'anonymous');
         script.setAttribute('async', 'true');
-        
         container.appendChild(script);
     }
 
-    // 댓글 영역 표시
     container.style.display = "block";
 }
 </script>
