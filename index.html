@@ -1,17 +1,20 @@
 ---
 layout: default
 ---
-{% for post in site.posts %}
-<div class="post-wrapper">
-    <div class="post-header">
-        <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-        <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
-    </div>
-    <div class="article">
-        {{ post.excerpt | strip_html | truncatewords: 40 }}
-    </div>
-    <div class="action">
-        <a href="{{ post.url | relative_url }}">댓글 보기</a>
-    </div>
+
+<div class="posts-list">
+    {% for post in site.posts %}
+    <article class="post-wrapper">
+        <header class="post-header">
+            <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+            <span class="post-date">{{ post.date | date: "%Y.%m.%d" }}</span>
+        </header>
+        <div class="post-excerpt">
+            {{ post.excerpt | strip_html | truncatewords: 40 }}
+        </div>
+        <footer class="post-footer">
+            <a href="{{ post.url | relative_url }}" class="read-more">더보기</a>
+        </footer>
+    </article>
+    {% endfor %}
 </div>
-{% endfor %}
