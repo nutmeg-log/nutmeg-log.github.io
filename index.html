@@ -3,18 +3,64 @@ layout: default
 ---
 
 <div class="posts-list">
-    {% for post in site.posts %}
+    {% for post in paginator.posts %}
     <article class="post-wrapper">
         <header class="post-header">
+            <div class="meta">
+                {% if post.category %}
+                <span class="entryCategory">{{ post.category }}</span>
+                {% endif %}
+                <span class="date">{{ post.date | date: "%B %d, %Y" }}</span>
+            </div>
             <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-            <span class="post-date">{{ post.date | date: "%Y.%m.%d" }}</span>
         </header>
-        <div class="post-excerpt">
-            {{ post.excerpt | strip_html | truncatewords: 40 }}
+        
+        <div class="post-content">
+            {% if post.excerpt %}
+                {{ post.excerpt | strip_html | truncatewords: 40 }}
+            {% else %}
+                {{ post.content | strip_html | truncatewords: 40 }}
+            {% endif %}
         </div>
+        
         <footer class="post-footer">
-            <a href="{{ post.url | relative_url }}" class="read-more">더보기</a>
+            <a href="{{ post.url | append: '#utterances-comments' | relative_url }}" class="comment-link">
+                <i class="fa fa-fw fa-comment"></i> 댓글 보기
+            </a>
         </footer>
     </article>
     {% endfor %}
 </div>
+
+<!-- 티스토리 스타일 페이지네이션 -->
+{% if paginator.total_pages > 1 %}
+<div class="paging">
+    {% if paginator.previous_page %}
+        {% if paginator.previous_page == 1 %}
+            <a href="{{ '/' | relative_url }}" class="prev-page"><i class="fa fa-fw fa-angle-left"></i></a>
+        {% else %}
+            <a href="{{ paginator.previous_page_path | relative_url }}" class="prev-page"><i class="fa fa-fw fa-angle-left"></i></a>
+        {% endif %}
+    {% else %}
+        <span class="prev-page disabled"><i class="fa fa-fw fa-angle-left"></i></span>
+    {% endif %}
+
+    <span class="numbox">
+        {% for page in (1..paginator.total_pages) %}
+            {% if page == paginator.page %}
+                <span class="num selected">{{ page }}</span>
+            {% elsif page == 1 %}
+                <a href="{{ '/' | relative_url }}" class="num">{{ page }}</a>
+            {% else %}
+                <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}" class="num">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+    </span>
+
+    {% if paginator.next_page %}
+        <a href="{{ paginator.next_page_path | relative_url }}" class="next-page"><i class="fa fa-fw fa-angle-right"></i></a>
+    {% else %}
+        <span class="next-page disabled"><i class="fa fa-fw fa-angle-right"></i></span>
+    {% endif %}
+</div>
+{% endif %}
