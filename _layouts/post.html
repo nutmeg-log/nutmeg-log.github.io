@@ -27,7 +27,7 @@ layout: default
             </a>
         </div>
         
-        <div id="post-cusdis-root" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <div id="post-cusdis-root" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
 </div>
 
@@ -40,34 +40,35 @@ function togglePostCusdis(event) {
 
     if (container.style.display === "block") {
         container.style.display = "none";
+        container.innerHTML = "";
         return;
     }
 
-    if (container.innerHTML === "") {
-        var thread = document.createElement('div');
-        thread.id = 'cusdis_thread';
-        thread.setAttribute('data-host', 'https://cusdis.com');
-        thread.setAttribute('data-app-id', '99a4e3fa-79ee-471a-82da-0b8214bc1fc4');
-        thread.setAttribute('data-page-id', '{{ page.url }}');
-        thread.setAttribute('data-page-url', window.location.href);
-        thread.setAttribute('data-page-title', '{{ page.title | escape }}');
-        thread.setAttribute('data-theme', 'light');
-        
-        container.appendChild(thread);
+    var thread = document.createElement('div');
+    thread.id = 'cusdis_thread';
+    thread.setAttribute('data-host', 'https://cusdis.com');
+    thread.setAttribute('data-app-id', '99a4e3fa-79ee-471a-82da-0b8214bc1fc4');
+    thread.setAttribute('data-page-id', '{{ page.url | relative_url }}');
+    thread.setAttribute('data-page-url', '{{ site.url }}{{ page.url | relative_url }}');
+    thread.setAttribute('data-page-title', '{{ page.title | escape }}');
+    thread.setAttribute('data-theme', 'light');
+    
+    container.appendChild(thread);
+    container.style.display = "block";
 
+    if (window.CUSDIS) {
+        window.CUSDIS.initial();
+    } else {
         var script = document.createElement('script');
         script.src = 'https://cusdis.com/js/cusdis.es.js';
         script.async = true;
-        script.defer = true;
-        container.appendChild(script);
+        document.body.appendChild(script);
     }
-
-    container.style.display = "block";
 }
 </script>
 
 <style>
-.comment iframe {
+.cusdis-wrapper iframe {
     border-radius: 0px !important;
 }
 </style>
