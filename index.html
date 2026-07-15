@@ -5,6 +5,7 @@ layout: default
 <div class="posts-list">
     {% for post in paginator.posts %}
     <article class="post-wrapper">
+        <!-- 포스트 헤더 (카테고리, 날짜, 제목) -->
         <header class="post-header">
             <div class="meta">
                 {% if post.category %}
@@ -16,22 +17,22 @@ layout: default
             <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
         </header>
         
+        <!-- 포스트 본문 전체 출력 (필터 없이 완벽하게 동일하게 표출) -->
         <div class="post-content">
-            {% if post.excerpt %}
-                {{ post.excerpt | strip_html | truncatewords: 35 }}
-            {% else %}
-                {{ post.content | strip_html | truncatewords: 35 }}
-            {% endif %}
+            {{ post.content }}
         </div>
         
+        <!-- 하단 댓글 링크 영역 -->
         <footer class="post-footer">
-            <a href="{{ post.url | relative_url }}" class="read-more">더보기</a>
+            <a href="{{ post.url | append: '#utterances-comments' | relative_url }}" class="comment-link">
+                <i class="fa fa-fw fa-comment"></i> 댓글 보기
+            </a>
         </footer>
     </article>
     {% endfor %}
 </div>
 
-<!-- 하단 페이지네이션 -->
+<!-- 하단 페이지네이션 (글이 많아질 경우 다음 장으로 이동) -->
 {% if paginator.total_pages > 1 %}
 <div class="paging">
     {% if paginator.previous_page %}
