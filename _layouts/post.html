@@ -2,36 +2,38 @@
 layout: default
 ---
 
-<div class="mainElement entry">
-    <div class="titleWrap">
-        <h2>{{ page.title }}</h2>
-        <div class="meta">
-            {% if page.category %}
-            <a class="entryCategory" href="{{ site.baseurl }}/category/{{ page.category | slugify }}">{{ page.category }}</a> 
-            {% endif %}
-            <span class="date">
-                {{ page.date | date: "%B %d, %Y" }}
-            </span>
+<div class="posts-list">
+    <div class="mainElement entry">
+        <div class="titleWrap">
+            <h2>{{ page.title }}</h2>
+            <div class="meta">
+                {% if page.category %}
+                <a class="entryCategory" href="{{ site.baseurl }}/category/{{ page.category | slugify }}">{{ page.category }}</a> 
+                {% endif %}
+                <span class="date">
+                    {{ page.date | date: "%B %d, %Y" }}
+                </span>
+            </div>
         </div>
+        
+        <div class="article">
+            {{ content }}
+        </div>
+        
+        <div class="actionTrail" style="cursor: pointer;">
+            <i class="fa fa-fw fa-comment"></i> 
+            <a href="#" onclick="togglePostComments(event)">
+                <span class="cnt">comment</span>
+            </a>
+        </div>
+        
+        <div id="post-comments-root" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
-    
-    <div class="article">
-        {{ content }}
-    </div>
-    
-    <div class="actionTrail" style="cursor: pointer;">
-        <i class="fa fa-fw fa-comment"></i> 
-        <a href="#" onclick="togglePostComments(event)">
-            <span class="cnt">comment</span>
-        </a>
-    </div>
-    
-    <div id="post-comments-root" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
 </div>
 
 <script>
 function togglePostComments(event) {
-    event.preventDefault(); // 페이지 튐 방지
+    event.preventDefault(); // 클릭 시 페이지가 위로 튀는 현상 방지
     
     var container = document.getElementById('post-comments-root');
     if (!container) return;
@@ -44,8 +46,8 @@ function togglePostComments(event) {
     if (container.innerHTML === "") {
         var script = document.createElement('script');
         script.setAttribute('src', 'https://utteranc.es/client.js');
-        script.setAttribute('repo', 'nutmeg-log/nutmeg-log.github.io'); // 본인의 레포지토리 주소
-        script.setAttribute('issue-term', '{{ page.title | escape }}'); // 포스트 제목 기준으로 댓글 매칭
+        script.setAttribute('repo', 'nutmeg-log/nutmeg-log.github.io'); // 사용자의 github 저장소 매칭
+        script.setAttribute('issue-term', '{{ page.title | escape }}'); // 포스트 제목 기준 매칭
         script.setAttribute('theme', 'github-light');
         script.setAttribute('crossorigin', 'anonymous');
         script.setAttribute('async', 'true');
