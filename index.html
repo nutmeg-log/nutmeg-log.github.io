@@ -21,7 +21,7 @@ layout: default
         </div>
         
         <footer class="post-footer">
-            <a href="#" class="comment-link" onclick="toggleComments(event, '{{ post.url | relative_url }}', 'comments-{{ forloop.index }}')">
+            <a href="#" class="comment-link" onclick="toggleComments(event, '{{ post.title | escape }}', 'comments-{{ forloop.index }}')">
                 <i class="fa fa-fw fa-comment"></i> 댓글 보기 / 쓰기
             </a>
             
@@ -52,7 +52,7 @@ layout: default
             {% else %}
                 <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}" class="num">{{ page }}</a>
             {% endif %}
-        {% endfor %}
+         font-weight: 600;      {% endfor %}
     </span>
 
     {% if paginator.next_page %}
@@ -64,25 +64,25 @@ layout: default
 {% endif %}
 
 <script>
-function toggleComments(event, postUrl, containerId) {
+function toggleComments(event, postTitle, containerId) {
     event.preventDefault(); // 기본 링크 이동 막기
     
     var container = document.getElementById(containerId);
     if (!container) return;
 
-    // 만약 이미 열려있다면 닫기
+    // 만약 이미 열려있다면 토글하여 닫기
     if (container.style.display === "block") {
         container.style.display = "none";
         return;
     }
 
-    // 처음 여는 것이라면 Utterances 댓글창 스크립트를 생성하여 주입
+    // 처음 여는 것이라면 Utterances 스크립트를 생성하여 주입
     if (container.innerHTML === "") {
         var script = document.createElement('script');
         script.setAttribute('src', 'https://utteranc.es/client.js');
-        script.setAttribute('repo', 'nutmeg-log/nutmeg-log.github.io'); // 본인의 깃허브 저장소명에 맞춰 자동으로 변경됩니다.
-        script.setAttribute('issue-term', postUrl); // 포스트의 고유 경로(URL)를 기준으로 댓글 분리
-        script.setAttribute('theme', 'github-light'); // 밝은 테마 적용
+        script.setAttribute('repo', 'nutmeg-log/nutmeg-log.github.io'); // 본인의 깃허브 저장소
+        script.setAttribute('issue-term', postTitle); // 주소창 URL 대신 포스트 제목(title)으로 매칭하여 충돌 방지
+        script.setAttribute('theme', 'github-light'); 
         script.setAttribute('crossorigin', 'anonymous');
         script.setAttribute('async', 'true');
         
