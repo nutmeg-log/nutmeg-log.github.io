@@ -48,17 +48,28 @@ function togglePostCusdis(event) {
     var container = document.getElementById('post-cusdis-root');
     if (!container) return;
 
+    // 1. 이미 열려있다면 숨깁니다.
     if (container.style.display === "block") {
         container.style.display = "none";
-    } else {
-        container.style.display = "block";
-        
-        if (window.CUSDIS && typeof window.CUSDIS.renderId === 'function') {
-            var threadEl = document.getElementById('cusdis_thread_detail');
-            if (threadEl) {
-                window.CUSDIS.renderId(threadEl);
-            }
+        return;
+    }
+
+    // 2. 영역을 먼저 열어 브라우저에 너비/높이를 인지시킵니다.
+    container.style.display = "block";
+    
+    // 3. 그 즉시 Cusdis 엔진에 명령하여 강제로 댓글창 프레임을 그리게 만듭니다.
+    if (window.CUSDIS && typeof window.CUSDIS.renderId === 'function') {
+        var threadEl = document.getElementById('cusdis_thread_detail');
+        if (threadEl) {
+            window.CUSDIS.renderId(threadEl);
         }
     }
 }
 </script>
+
+<style>
+/* dari.tistory.com 감성의 깔끔한 직각 모서리 스타일 보존 */
+.cusdis-wrapper iframe {
+    border-radius: 0px !important;
+}
+</style>
