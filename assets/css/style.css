@@ -19,6 +19,18 @@ a { color: #000; text-decoration: none; }
 /* 메인 콘텐츠 영역 */
 #content { width: 430px; float: right; }
 
+/* 본문 카드형 박스 */
+#content { width: 560px; }
+.post-wrapper { 
+    background: #fff; padding: 30px; margin-bottom: 30px; 
+    border: 1px solid #e1e1e1; border-radius: 4px; 
+}
+.post-header h2 { margin: 0 0 10px 0; font-size: 22px; }
+.date { font-size: 12px; color: #999; }
+.article { margin: 20px 0; line-height: 1.8; color: #444; }
+.action a { font-size: 12px; color: #888; text-decoration: underline; }
+
+
 /* 3. 포스트 (카드 박스 스타일) */
 .post-wrapper {
     background: #fff;
@@ -41,7 +53,7 @@ a { color: #000; text-decoration: none; }
 #results-container li { padding: 5px 0; font-size: 12px; }
 
 /* 푸터 */
-#footer { clear: both; padding: 60px 0; text-align: center; color: #aaa; font-size: 12px; }
+#footer { text-align: center; font-size: 12px; color: #aaa; margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; }
 
 /* 3. 포스트 (글 본문) 레이아웃 */
 .post-wrapper { margin-bottom: 20px; padding: 20px; background: #fff; border: 1px solid #eee; }
