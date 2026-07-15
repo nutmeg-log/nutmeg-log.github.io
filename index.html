@@ -1,56 +1,17 @@
 ---
 layout: default
 ---
-
-{% for post in paginator.posts %}
+{% for post in site.posts %}
 <div class="post-wrapper">
-    <div class="titleWrap">
+    <div class="post-header">
         <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
-        <div class="meta" style="margin-bottom: 10px; color: #888; font-size: 12px;">
-            {% if post.category %}
-            <span class="entryCategory">{{ post.category }}</span> |
-            {% endif %}
-            <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
-        </div>
+        <span class="date">{{ post.date | date: "%Y.%m.%d" }}</span>
     </div>
-    
-    <div class="article" style="line-height: 1.6; color: #333;">
-        {% if post.excerpt %}
-            {{ post.excerpt | strip_html | truncatewords: 50 }}
-        {% else %}
-            {{ post.content | strip_html | truncatewords: 50 }}
-        {% endif %}
+    <div class="article">
+        {{ post.excerpt | strip_html | truncatewords: 40 }}
     </div>
-    
-    <div class="actionTrail" style="margin-top: 15px; font-size: 11px;">
-        <i class="fa fa-fw fa-comment"></i> 
-        <a href="{{ post.url | append: '#utterances-comments' | relative_url }}">댓글 보기</a>
+    <div class="action">
+        <a href="{{ post.url | relative_url }}">댓글 보기</a>
     </div>
 </div>
 {% endfor %}
-
-{% if paginator.total_pages > 1 %}
-<div class="paging" style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
-    {% if paginator.previous_page %}
-        <a href="{{ paginator.previous_page_path | relative_url }}"><i class="fa fa-fw fa-angle-left"></i></a>
-    {% else %}
-        <span style="color: #ccc;"><i class="fa fa-fw fa-angle-left"></i></span>
-    {% endif %}
-
-    <span class="numbox" style="margin: 0 15px;">
-        {% for page in (1..paginator.total_pages) %}
-            {% if page == paginator.page %}
-                <span class="num selected" style="font-weight: bold; margin: 0 5px;">{{ page }}</span>
-            {% else %}
-                <a href="{{ site.paginate_path | replace: ':num', page | relative_url }}" class="num" style="margin: 0 5px;">{{ page }}</a>
-            {% endif %}
-        {% endfor %}
-    </span>
-
-    {% if paginator.next_page %}
-        <a href="{{ paginator.next_page_path | relative_url }}"><i class="fa fa-fw fa-angle-right"></i></a>
-    {% else %}
-        <span style="color: #ccc;"><i class="fa fa-fw fa-angle-right"></i></span>
-    {% endif %}
-</div>
-{% endif %}
