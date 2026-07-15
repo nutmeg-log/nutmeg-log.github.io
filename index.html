@@ -4,7 +4,7 @@ layout: default
 
 <div class="posts-list">
     {% for post in paginator.posts %}
-    <div class="mainElement entry" id="post-{{ forloop.index }}">
+    <div class="mainElement entry">
         <div class="titleWrap">
             <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
             <div class="meta">
@@ -23,97 +23,45 @@ layout: default
         
         <div class="actionTrail" style="cursor: pointer;">
             <i class="fa fa-fw fa-comment"></i> 
-            <a href="#" onclick="toggleCusdis(event, '{{ post.title | escape }}', '{{ post.url | relative_url }}', 'cusdis-container-{{ forloop.index }}')">
+            <a href="#" onclick="toggleCusdis(event, '{{ forloop.index }}')">
                 <span class="cnt">comment</span>
             </a>
         </div>
         
-        <div id="cusdis-container-{{ forloop.index }}" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <div id="cusdis-wrapper-{{ forloop.index }}" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
+            <div id="cusdis_thread"
+                 data-host="https://cusdis.com"
+                 data-app-id="99a4e3fa-79ee-471a-82da-0b8214bc1fc4"
+                 data-page-id="{{ post.url | relative_url }}"
+                 data-page-url="{{ site.url }}{{ post.url | relative_url }}"
+                 data-page-title="{{ post.title | escape }}"
+                 data-theme="light">
+            </div>
+        </div>
     </div>
     {% endfor %}
 </div>
 
-{% if paginator.total_pages > 1 %}
-<div class="paging">
-    {% if paginator.previous_page %}
-        {% if paginator.previous_page == 1 %}
-            <a href="{{ '/' | relative_url }}" class="prev"><i class="fa fa-fw fa-angle-left fa-lg"></i></a>
-        {% else %}
-            <a href="{{ paginator.previous_page_path | relative_url }}" class="prev"><i class="fa fa-fw fa-angle-left fa-lg"></i></a>
-        {% endif %}
-    {% else %}
-        <span class="prev" style="color:#ccc; cursor:default;"><i class="fa fa-fw fa-angle-left fa-lg"></i></span>
-    {% endif %}
-
-    <span class="numbox" style="margin: 0 15px;">
-        {% for page in (1..paginator.total_pages) %}
-            {% if page == paginator.page %}
-                <span class="num selected" style="font-weight: bold; margin: 0 5px;">{{ page }}</span>
-            {% elsif page == 1 %}
-                <a href="{{ '/' | relative_url }}" class="num" style="margin: 0 5px;">{{ page }}</a>
-            {% else %}
-                <a href="{{ site.paginate_path | relative_url | replace: ':num', page }}" class="num" style="margin: 0 5px;">{{ page }}</a>
-            {% endif %}
-        {% endfor %}
-    </span>
-
-    {% if paginator.next_page %}
-        <a href="{{ paginator.next_page_path | relative_url }}" class="next"><i class="fa fa-fw fa-angle-right"></i></a>
-    {% else %}
-        <span class="next" style="color:#ccc; cursor:default;"><i class="fa fa-fw fa-angle-right fa-lg"></i></span>
-    {% endif %}
-</div>
-{% endif %}
+<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
 <script>
-function toggleCusdis(event, postTitle, postUrl, containerId) {
+function toggleCusdis(event, index) {
     event.preventDefault();
     
-    var container = document.getElementById(containerId);
-    if (!container) return;
+    // 현재 클릭한 포스트의 래퍼만 타겟팅
+    var wrapper = document.getElementById('cusdis-wrapper-' + index);
+    if (!wrapper) return;
 
-    // 1. 이미 열려있다면 닫고, 요소 충돌을 막기 위해 흔적을 지웁니다.
-    if (container.style.display === "block") {
-        container.style.display = "none";
-        container.innerHTML = ""; 
-        return;
-    }
-
-    // 2. 다른 포스트의 댓글창이 열려있다면 모두 초기화합니다.
-    var allContainers = document.querySelectorAll('.cusdis-wrapper');
-    for (var i = 0; i < allContainers.length; i++) {
-        allContainers[i].style.display = "none";
-        allContainers[i].innerHTML = "";
-    }
-
-    // 3. Cusdis가 요구하는 정확한 id('cusdis_thread')로 단 하나만 생성합니다.
-    var thread = document.createElement('div');
-    thread.id = 'cusdis_thread';
-    thread.setAttribute('data-host', 'https://cusdis.com');
-    thread.setAttribute('data-app-id', '99a4e3fa-79ee-471a-82da-0b8214bc1fc4');
-    thread.setAttribute('data-page-id', postUrl);
-    thread.setAttribute('data-page-url', '{{ site.url }}' + postUrl);
-    thread.setAttribute('data-page-title', postTitle);
-    thread.setAttribute('data-theme', 'light');
-    
-    container.appendChild(thread);
-    container.style.display = "block";
-
-    // 4. 스크립트를 재호출하여 방금 만든 영역을 읽어들이게 강제합니다.
-    if (window.CUSDIS) {
-        window.CUSDIS.initial();
+    // display 토글만 수행 (innerHTML을 절대 건드리지 않음 -> 사라짐 방지)
+    if (wrapper.style.display === "block") {
+        wrapper.style.display = "none";
     } else {
-        var script = document.createElement('script');
-        script.src = 'https://cusdis.com/js/cusdis.es.js';
-        script.async = true;
-        document.body.appendChild(script);
+        // 모든 다른 댓글창을 닫고 하나만 엽니다
+        var allWrappers = document.querySelectorAll('.cusdis-wrapper');
+        for (var i = 0; i < allWrappers.length; i++) {
+            allWrappers[i].style.display = "none";
+        }
+        wrapper.style.display = "block";
     }
 }
 </script>
-
-<style>
-/* adari 특유의 감성: 아이프레임 외곽의 곡선을 날려버리고 직각으로 만듭니다 */
-.cusdis-wrapper iframe {
-    border-radius: 0px !important;
-}
-</style>
