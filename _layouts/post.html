@@ -27,22 +27,20 @@ layout: default
             </a>
         </div>
         
-        <!-- 최초 로딩 시 뼈대를 보관하고 준비합니다 -->
         <div id="post-cusdis-root" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
-            <div id="cusdis_thread"
+            <div id="cusdis_thread_detail"
                  data-host="https://cusdis.com"
                  data-app-id="99a4e3fa-79ee-471a-82da-0b8214bc1fc4"
                  data-page-id="{{ page.url }}"
                  data-page-url="{{ site.url }}{{ page.url }}"
-                 data-page-title="{{ page.title | escape }}"
-                 data-theme="light">
+                 data-page-title="{{ page.title | escape }}">
             </div>
         </div>
     </div>
 </div>
 
-<!-- 최초 로딩 시 스크립트를 즉시 실행하여 뼈대를 마운트 처리 -->
 <script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
+
 <script>
 function togglePostCusdis(event) {
     event.preventDefault();
@@ -54,8 +52,9 @@ function togglePostCusdis(event) {
         container.style.display = "none";
     } else {
         container.style.display = "block";
+        
         if (window.CUSDIS && typeof window.CUSDIS.renderId === 'function') {
-            var threadEl = container.querySelector('#cusdis_thread');
+            var threadEl = document.getElementById('cusdis_thread_detail');
             if (threadEl) {
                 window.CUSDIS.renderId(threadEl);
             }
