@@ -33,7 +33,7 @@ layout: default
                  data-host="https://cusdis.com"
                  data-app-id="99a4e3fa-79ee-471a-82da-0b8214bc1fc4"
                  data-page-id="{{ post.url | relative_url }}"
-                 data-page-url="{{ site.url }}{{ post.url | relative_url }}"
+                 data-page-url="{{ post.url | relative_url }}"
                  data-page-title="{{ post.title | escape }}">
             </div>
         </div>
@@ -82,28 +82,31 @@ function toggleCusdis(event, index) {
     var container = document.getElementById('cusdis-container-' + index);
     if (!container) return;
 
-    // 1. 이미 열려있다면 닫아줍니다.
     if (container.style.display === "block") {
         container.style.display = "none";
         return;
     }
 
-    // 2. 닫혀있다면 먼저 컨테이너 영역을 엽니다. (너비/높이 확보)
     container.style.display = "block";
     
-    // 3. 확보된 영역 위에 Cusdis 엔진이 강제로 렌더링 빔을 쏘도록 유도합니다.
-    // window.CUSDIS 객체가 준비되었고, renderId 함수가 존재할 때만 안전하게 실행합니다.
-    if (window.CUSDIS && typeof window.CUSDIS.renderId === 'function') {
-        var threadEl = document.getElementById('cusdis_thread_' + index);
-        if (threadEl) {
-            window.CUSDIS.renderId(threadEl);
+    // [교정] 브라우저가 display: block 공간을 완전히 확보한 직후(1프레임 뒤) 안전하게 렌더링을 지시합니다.
+    setTimeout(function() {
+        if (window.CUSDIS && typeof window.CUSDIS.renderId === 'function') {
+            var threadEl = document.getElementById('cusdis_thread_' + index);
+            if (threadEl) {
+                // 망가진 상대경로 URL 속성을 정상적인 절대 경로 풀 주소로 실시간 치환하여 전달
+                var relUrl = threadEl.getAttribute('data-page-url');
+                if (relUrl && !relUrl.startsWith('http')) {
+                    threadEl.setAttribute('data-page-url', window.location.origin + relUrl);
+                }
+                window.CUSDIS.renderId(threadEl);
+            }
         }
-    }
+    }, 50); 
 }
 </script>
 
 <style>
-/* dari.tistory.com 감성의 깔끔한 직각 모서리 스타일 보존 */
 .cusdis-wrapper iframe {
     border-radius: 0px !important;
 }
