@@ -27,11 +27,22 @@ layout: default
             </a>
         </div>
         
-        <!-- 클래스명을 고유값(cusdis-wrapper)으로 변경하여 기존 CSS display:none 강제 적용 충돌 해결 -->
-        <div id="post-cusdis-root" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <!-- 최초 로딩 시 뼈대를 보관하고 준비합니다 -->
+        <div id="post-cusdis-root" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
+            <div id="cusdis_thread"
+                 data-host="https://cusdis.com"
+                 data-app-id="99a4e3fa-79ee-471a-82da-0b8214bc1fc4"
+                 data-page-id="{{ page.url }}"
+                 data-page-url="{{ site.url }}{{ page.url }}"
+                 data-page-title="{{ page.title | escape }}"
+                 data-theme="light">
+            </div>
+        </div>
     </div>
 </div>
 
+<!-- 최초 로딩 시 스크립트를 즉시 실행하여 뼈대를 마운트 처리 -->
+<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 <script>
 function togglePostCusdis(event) {
     event.preventDefault();
@@ -41,29 +52,14 @@ function togglePostCusdis(event) {
 
     if (container.style.display === "block") {
         container.style.display = "none";
-        return;
+    } else {
+        container.style.display = "block";
+        if (window.CUSDIS && typeof window.CUSDIS.renderId === 'function') {
+            var threadEl = container.querySelector('#cusdis_thread');
+            if (threadEl) {
+                window.CUSDIS.renderId(threadEl);
+            }
+        }
     }
-
-    if (container.innerHTML === "") {
-        var thread = document.createElement('div');
-        thread.id = 'cusdis_thread';
-        thread.setAttribute('data-host', 'https://cusdis.com');
-        thread.setAttribute('data-app-id', '99a4e3fa-79ee-471a-82da-0b8214bc1fc4');
-        thread.setAttribute('data-page-id', '{{ page.url }}');
-        thread.setAttribute('data-page-url', window.location.href);
-        thread.setAttribute('data-page-title', '{{ page.title | escape }}');
-        thread.setAttribute('data-theme', 'light');
-        thread.setAttribute('data-iframe-css', 'https://cusdis.com/js/style.css');
-        
-        container.appendChild(thread);
-
-        var script = document.createElement('script');
-        script.src = 'https://cusdis.com/js/cusdis.es.js';
-        script.async = true;
-        script.defer = true;
-        container.appendChild(script);
-    }
-
-    container.style.display = "block";
 }
 </script>
