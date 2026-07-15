@@ -27,6 +27,7 @@ layout: default
             </a>
         </div>
         
+        <!-- 상세 페이지용 익명 댓글창 컨테이너 -->
         <div id="post-giscus-root" class="comment" style="margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
 </div>
@@ -53,7 +54,7 @@ function togglePostGiscus(event) {
         script.setAttribute('data-mapping', 'specific');
         script.setAttribute('data-term', '{{ page.title | escape }}');
         script.setAttribute('data-strict', '0');
-        script.setAttribute('data-reactions-enabled', '1');
+        script.setAttribute('data-reactions-enabled', '0'); // 이모지 반응 기능 완전 비활성화 (0)
         script.setAttribute('data-emit-metadata', '0');
         script.setAttribute('data-input-position', 'top');
         script.setAttribute('data-theme', 'light');
