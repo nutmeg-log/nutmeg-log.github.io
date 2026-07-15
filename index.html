@@ -28,7 +28,7 @@ layout: default
             </a>
         </div>
         
-        <div id="cusdis-container-{{ forloop.index }}" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <div id="cusdis-container-{{ forloop.index }}" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
     {% endfor %}
 </div>
@@ -72,12 +72,48 @@ function toggleCusdis(event, postTitle, postUrl, containerId) {
     var container = document.getElementById(containerId);
     if (!container) return;
 
+    // 1. 이미 열려있다면 닫고, 요소 충돌을 막기 위해 흔적을 지웁니다.
     if (container.style.display === "block") {
         container.style.display = "none";
+        container.innerHTML = ""; 
         return;
     }
 
-    // 컨테이너가 비어있을 때만(최초 1회) 뼈대와 스크립트를 로드합니다.
-    if (container.innerHTML === "") {
-        var thread = document.createElement('div');
-        thread.id = 'cus
+    // 2. 다른 포스트의 댓글창이 열려있다면 모두 초기화합니다.
+    var allContainers = document.querySelectorAll('.cusdis-wrapper');
+    for (var i = 0; i < allContainers.length; i++) {
+        allContainers[i].style.display = "none";
+        allContainers[i].innerHTML = "";
+    }
+
+    // 3. Cusdis가 요구하는 정확한 id('cusdis_thread')로 단 하나만 생성합니다.
+    var thread = document.createElement('div');
+    thread.id = 'cusdis_thread';
+    thread.setAttribute('data-host', 'https://cusdis.com');
+    thread.setAttribute('data-app-id', '99a4e3fa-79ee-471a-82da-0b8214bc1fc4');
+    thread.setAttribute('data-page-id', postUrl);
+    thread.setAttribute('data-page-url', '{{ site.url }}' + postUrl);
+    thread.setAttribute('data-page-title', postTitle);
+    thread.setAttribute('data-theme', 'light');
+    
+    container.appendChild(thread);
+    container.style.display = "block";
+
+    // 4. 스크립트를 재호출하여 방금 만든 영역을 읽어들이게 강제합니다.
+    if (window.CUSDIS) {
+        window.CUSDIS.initial();
+    } else {
+        var script = document.createElement('script');
+        script.src = 'https://cusdis.com/js/cusdis.es.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+}
+</script>
+
+<style>
+/* adari 특유의 감성: 아이프레임 외곽의 곡선을 날려버리고 직각으로 만듭니다 */
+.cusdis-wrapper iframe {
+    border-radius: 0px !important;
+}
+</style>
