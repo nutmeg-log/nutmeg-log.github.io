@@ -23,54 +23,51 @@ layout: default
         
         <div class="actionTrail" style="cursor: pointer;">
             <i class="fa fa-fw fa-comment"></i> 
-            <a href="#" onclick="toggleCusdis(event, '{{ post.title | escape }}', '{{ post.url | relative_url }}', 'cusdis-container-{{ forloop.index }}')">
+            <a href="#" onclick="toggleWaline(event, '{{ forloop.index }}', '{{ post.url | relative_url }}')">
                 <span class="cnt">comment</span>
             </a>
         </div>
         
-        <div id="cusdis-container-{{ forloop.index }}" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <!-- Waline 컨테이너 -->
+        <div id="waline-wrapper-{{ forloop.index }}" class="waline-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
+            <div id="waline-{{ forloop.index }}"></div>
+        </div>
     </div>
     {% endfor %}
 </div>
 
-<!-- 나머지 페이징 코드는 그대로 유지하세요 -->
+<!-- Waline 초기화 스크립트 -->
+<script type="module">
+    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
 
-<script>
-function toggleCusdis(event, postTitle, postUrl, containerId) {
-    event.preventDefault();
-    var container = document.getElementById(containerId);
-    if (!container) return;
-
-    if (container.style.display === "block") {
-        container.style.display = "none";
-        container.innerHTML = "";
-        return;
-    }
-
-    // 다른 모든 댓글창 닫기
-    var allContainers = document.querySelectorAll('.comment');
-    for (var i = 0; i < allContainers.length; i++) {
-        allContainers[i].style.display = "none";
-        allContainers[i].innerHTML = "";
-    }
-
-    container.style.display = "block";
-    
-    // Cusdis 기본 로드
-    var thread = document.createElement('div');
-    thread.id = 'cusdis_thread';
-    thread.setAttribute('data-host', 'https://cusdis.com');
-    thread.setAttribute('data-app-id', '99a4e3fa-79ee-471a-82da-0b8214bc1fc4'); // 질문자님의 ID
-    thread.setAttribute('data-page-id', postUrl);
-    thread.setAttribute('data-page-url', '{{ site.url }}' + postUrl);
-    thread.setAttribute('data-page-title', postTitle);
-    thread.setAttribute('data-theme', 'light');
-    
-    container.appendChild(thread);
-    
-    var script = document.createElement('script');
-    script.src = 'https://cusdis.com/js/cusdis.es.js';
-    script.async = true;
-    container.appendChild(script);
-}
+    window.toggleWaline = function(event, index, path) {
+        event.preventDefault();
+        var container = document.getElementById('waline-wrapper-' + index);
+        
+        if (container.style.display === "block") {
+            container.style.display = "none";
+        } else {
+            // 다른 창 닫기
+            document.querySelectorAll('.waline-wrapper').forEach(el => el.style.display = "none");
+            container.style.display = "block";
+            
+            // 초기화 (한 번만 실행)
+            if (!container.dataset.initialized) {
+                init({
+                    el: '#waline-' + index,
+                    serverURL: 'https://nutmeg-eight.vercel.app',
+                    path: path,
+                    emoji: false,
+                    requiredMeta: ['nick'],
+                    login: 'disable'
+                });
+                container.dataset.initialized = 'true';
+            }
+        }
+    };
 </script>
+
+<style>
+    :root { --waline-border-radius: 0px !important; --waline-avatar-radius: 0px !important; }
+    .wl-footer { display: none !important; }
+</style>
