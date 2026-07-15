@@ -22,21 +22,21 @@ layout: default
         
         <div class="actionTrail" style="cursor: pointer;">
             <i class="fa fa-fw fa-comment"></i> 
-            <a href="#" onclick="togglePostGiscus(event)">
+            <a href="#" onclick="togglePostCusdis(event)">
                 <span class="cnt">comment</span>
             </a>
         </div>
         
-        <!-- 상세 페이지용 익명 댓글창 컨테이너 -->
-        <div id="post-giscus-root" class="comment" style="margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <!-- 상세 페이지용 Cusdis 익명댓글 컨테이너 -->
+        <div id="post-cusdis-root" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
 </div>
 
 <script>
-function togglePostGiscus(event) {
+function togglePostCusdis(event) {
     event.preventDefault();
     
-    var container = document.getElementById('post-giscus-root');
+    var container = document.getElementById('post-cusdis-root');
     if (!container) return;
 
     if (container.style.display === "block") {
@@ -45,23 +45,21 @@ function togglePostGiscus(event) {
     }
 
     if (container.innerHTML === "") {
-        var script = document.createElement('script');
-        script.setAttribute('src', 'https://giscus.app/client.js');
-        script.setAttribute('data-repo', 'nutmeg-log/nutmeg-log.github.io');
-        script.setAttribute('data-repo-id', 'R_kgDONG641g');
-        script.setAttribute('data-category', 'Announcements');
-        script.setAttribute('data-category-id', 'DIC_kwDONG641s4CkWzB');
-        script.setAttribute('data-mapping', 'specific');
-        script.setAttribute('data-term', '{{ page.title | escape }}');
-        script.setAttribute('data-strict', '0');
-        script.setAttribute('data-reactions-enabled', '0'); // 이모지 반응 기능 완전 비활성화 (0)
-        script.setAttribute('data-emit-metadata', '0');
-        script.setAttribute('data-input-position', 'top');
-        script.setAttribute('data-theme', 'light');
-        script.setAttribute('data-lang', 'ko');
-        script.setAttribute('crossorigin', 'anonymous');
-        script.setAttribute('async', 'true');
+        var thread = document.createElement('div');
+        thread.id = 'cusdis_thread';
+        thread.setAttribute('data-host', 'https://cusdis.com');
+        thread.setAttribute('data-app-id', 'bafad7eb-3b56-49d3-92de-f0212c4d5091'); // 발급받은 36자리 ID 입력
+        thread.setAttribute('data-page-id', '{{ page.url }}');
+        thread.setAttribute('data-page-url', window.location.href);
+        thread.setAttribute('data-page-title', '{{ page.title | escape }}');
+        thread.setAttribute('data-theme', 'light');
         
+        container.appendChild(thread);
+
+        var script = document.createElement('script');
+        script.src = 'https://cusdis.com/js/cusdis.es.js';
+        script.async = true;
+        script.defer = true;
         container.appendChild(script);
     }
 
