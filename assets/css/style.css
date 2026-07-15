@@ -22,7 +22,7 @@ blockquote p:last-child { margin-bottom: 0; }
 .moreless_content p:only-child { margin: 0; }
 .moreless_content p:last-child { margin-bottom: 0; }
 
-/* 숨김 처리 공통 (티스토리 기본 기능, 미사용 요소) */
+/* 숨김 처리 공통 */
 .moreless_bottom, .daum_like_wrapper, .container_postbtn, .container_postbtn *, 
 [data-tistory-react-app="Namecard"], #mediaLogLimit, iframe[src="/api/dummy/comment.php"], 
 .paging .no-more-prev, .paging .no-more-next, .tt_article_useless_p_margin div:last-child img { 
@@ -65,125 +65,51 @@ blockquote p:last-child { margin-bottom: 0; }
 .entry .titleWrap .admin { border: 1px dashed #eee; padding: 10px; text-align: center; }
 .entry .article { padding: 10px 0 12px 0; line-height: 1.6; }
 .entry .article p { margin-bottom: 5px !important; text-align: justify; }
-.entry .article .another_category { border: 0; }
-.entry .tagTrail { padding: 10px 0; }
-.entry .tagTrail a:before { content: '#'; }
 
-/* 공지글 및 보호글 */
-.entryNotice p:first-child { margin-top: 0; }
-.entryNotice p:last-child { margin-bottom: 0; }
-.entryNotice .article { padding-top: 10px; line-height: 1.5; }
-.entryProtected p { margin: 10px 0; text-align: center; }
-.entryProtected input { background: transparent; border: 0; }
-.entryProtected input[type="password"] { width: 120px; padding: 5px 0; border-bottom: 1px solid #eee; }
-.entryProtected .passwordForm { margin-bottom: 0; }
-.entryProtected input[type="password"]::placeholder { color: #000; }
-
-/* 리스트 (검색, 태그) */
+/* 리스트 및 페이징 */
 .searchList h3 span { margin-left: 5px; }
 .searchList ul { margin: 10px 0 0 0; padding: 0; }
 .searchList ul li { line-height: 40px; border-bottom: 1px solid #eee; }
-.searchList ul li:last-child { margin-bottom: -10px; border: 0; }
-.searchList .cnt { margin-left: 3px; font-size: 10px; letter-spacing: -1px; }
-.searchList .date { float: right; font-size: 10px; letter-spacing: -1px; font-family: 'Roboto', 'Nanum Barun Gothic', 'Nanum Gothic'; }
-.taglog ul { margin: 20px 0 0 0; padding: 0; }
-.taglog ul li { display: inline; }
-.taglog ul li a { margin-right: 7px; }
-.taglog ul li a:before { content: '#'; }
-.taglog .cloud1 { font-size: 15px; font-weight: bold; }
-.taglog .cloud2 { font-size: 14px; font-weight: bold; }
-.taglog .cloud3 { font-size: 13px; }
-.taglog .cloud4 { font-size: 12px; color: #777; }
-.taglog .cloud5 { font-size: 11px; color: #aaa; }
-
-/* 방명록 & 댓글 공통 입력폼 */
-.guestWrite input[type="text"], .guestWrite input[type="password"],
-.commentWrite input[type="text"], .commentWrite input[type="password"] { padding: 5px 0; border: 0; border-bottom: 1px solid #eee; }
-.guestWrite .name, .commentWrite .name { margin-right: 15px; }
-.guestWrite textarea, .commentWrite textarea { width: 99%; height: 100px; border: 1px solid #eee; font-family: 'Pretendard', sans-serif; font-size: 13px; }
-.guestWrite input[type="submit"], .commentWrite input[type="submit"] { border: 0; background: transparent; float: right; }
-.guestWrite .guestSecret { margin: 0; }
-
-/* 방명록 및 댓글 리스트 */
-.guestList, .commentList ul { padding: 0; margin: 0; }
-.guestList .guestA { padding-bottom: 20px; border-bottom: 1px solid #eee; }
-.guestList .guestA:last-child { margin-bottom: 0; border-bottom: 0; }
-.guestList .guestB { padding: 0 20px; }
-.guestList .meta, .comment .meta { padding: 20px 20px 0 20px; }
-.guestList .guestB .meta, .comment .meta { margin-top: 20px; padding: 0; }
-.guestList .guestContent { margin: 0; padding: 10px 20px; line-height: 1.8em; }
-.guestList .guest1 .guestContent, .guestList .guest2 .guestContent { padding-bottom: 0; }
-.guestList .guestB .guestContent { padding: 10px 0; }
-.guestList .guest2, .commentList .commentB { padding-left: 10px; border-left: 2px solid #ccc; }
-.guestList .meta .name, .comment .meta .name { margin-right: 5px; }
-.guestList .meta i { margin-right: 3px; }
-.guestList .meta .date, .comment .meta .date { letter-spacing: -1px; font-size: 11px; font-family: 'Roboto', 'Nanum Barun Gothic', 'Nanum Gothic'; }
-.guestList .meta .control { float: right; font-size: 10px; font-family: 'Roboto', 'Nanum Barun Gothic', 'Nanum Gothic'; }
-.guestList .meta .control a, .comment .meta .control a { margin-left: 5px; }
-
-/* 깃허브 Utterances 동적 래퍼 결합 */
-.comment { margin-top: 15px; display: none; }
-.comment ul { margin: 10px 0; padding: 0; text-align: justify; line-height: 1.5em; }
-.comment .meta .control { font-size: 9px; font-family: 'Pretendard', sans-serif; }
-.commentList .commentB { margin-left: 5px; }
-.commentList .commentContent { margin: 7px 0 10px 0; line-height: 1.8em; }
-
-/* 페이징 */
 .paging { font-size: 13px; text-align: center; }
-.paging .num { padding: 0 3px; }
-.paging .selected { font-weight: bold; }
 
-/* 반응형 레이아웃 */
-@media screen and (max-width: 700px) {
-    #container { width: 100%; padding-top: 0; }
-    #header { padding: 10px 0; }
-    #header h1 { margin: 20px 0; }
-    #sidebar { position: initial; float: none; width: auto; margin: 0; padding-bottom: 15px; text-align: center; }
-    #sidebar #menu { padding: 0px; text-align: center; }
-    #sidebar #menu li { display: inline; padding: 2px 0; }
-    #sidebar #menu li a span { padding-left: 1px; padding-right: 3px; }
-    #content { float: none; width: auto; margin: 20px 0; }
-    #search { display: none; }
-    #search input[type="text"] { width: 0%; float: left; }
-    #search .submit { float: right; }
-    .paging { text-align: center; }
-}
+/* Waline 커스텀 (가장 강력하게 숨김 처리) */
+/* 질문자님이 원하시는 '입력창만 남기기'를 위해 모든 요소를 강제 숨김 */
 
-/* --- Waline Minimalist Styling --- */
-:root {
-    --waline-border-radius: 0px !important;
-    --waline-avatar-radius: 0px !important;
-}
-
-/* 제목, 댓글 목록, 푸터 강제 숨김 */
-.wl-header, 
-.wl-list, 
-.wl-footer { 
+#waline .wl-header, 
+#waline .wl-list, 
+#waline .wl-footer, 
+#waline .wl-count,
+#waline .wl-sort,
+#waline .wl-login-info { 
     display: none !important; 
 }
 
-/* 박스 스타일 정리 */
-.wl-card { 
+/* 박스 스타일 */
+#waline .wl-card { 
     border: none !important; 
     box-shadow: none !important; 
     background: transparent !important; 
+    padding: 0 !important; 
 }
 
-/* 입력창 및 버튼 정리 */
-.wl-editor { 
+/* 입력창 */
+#waline .wl-editor { 
     border: 1px solid #ddd !important; 
     border-radius: 0px !important; 
     min-height: 80px !important; 
+    padding: 10px !important;
 }
 
-.wl-btn { 
+/* 버튼 */
+#waline .wl-btn { 
     border-radius: 0px !important; 
     background: #000 !important; 
     color: #fff !important; 
     padding: 5px 15px !important; 
+    margin-top: 10px !important;
 }
 
-.wl-action { 
+#waline .wl-action { 
     display: flex !important; 
     justify-content: flex-end !important; 
 }
