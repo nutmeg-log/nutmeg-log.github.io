@@ -4,7 +4,7 @@ layout: default
 
 <div class="posts-list">
     {% for post in paginator.posts %}
-    <div class="mainElement entry">
+    <div class="mainElement entry" id="post-{{ forloop.index }}">
         <div class="titleWrap">
             <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
             <div class="meta">
@@ -23,20 +23,12 @@ layout: default
         
         <div class="actionTrail" style="cursor: pointer;">
             <i class="fa fa-fw fa-comment"></i> 
-            <a href="#" onclick="toggleCusdis(event, '{{ forloop.index }}')">
+            <a href="#" onclick="toggleCusdis(event, '{{ post.title | escape }}', '{{ post.url | relative_url }}', 'cusdis-container-{{ forloop.index }}')">
                 <span class="cnt">comment</span>
             </a>
         </div>
         
-        <div id="cusdis-container-{{ forloop.index }}" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
-            <div id="cusdis_thread_{{ forloop.index }}"
-                 data-host="https://cusdis.com"
-                 data-app-id="99a4e3fa-79ee-471a-82da-0b8214bc1fc4"
-                 data-page-id="{{ post.url | relative_url }}"
-                 data-page-url="{{ site.url }}{{ post.url | relative_url }}"
-                 data-page-title="{{ post.title | escape }}">
-            </div>
-        </div>
+        <div id="cusdis-container-{{ forloop.index }}" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
     {% endfor %}
 </div>
@@ -73,13 +65,11 @@ layout: default
 </div>
 {% endif %}
 
-<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
-
 <script>
-function toggleCusdis(event, index) {
+function toggleCusdis(event, postTitle, postUrl, containerId) {
     event.preventDefault();
     
-    var container = document.getElementById('cusdis-container-' + index);
+    var container = document.getElementById(containerId);
     if (!container) return;
 
     if (container.style.display === "block") {
@@ -87,22 +77,7 @@ function toggleCusdis(event, index) {
         return;
     }
 
-    container.style.display = "block";
-    
-    setTimeout(function() {
-        if (window.CUSDIS && typeof window.CUSDIS.renderId === 'function') {
-            var threadEl = document.getElementById('cusdis_thread_' + index);
-            if (threadEl) {
-                window.CUSDIS.renderId(threadEl);
-            }
-        }
-    }, 50); 
-}
-</script>
-
-<style>
-/* 안전한 외부 Style 선언을 통해 adari.tistory.com의 직각 스타일을 강제 구현 */
-.cusdis-wrapper iframe {
-    border-radius: 0px !important;
-}
-</style>
+    // 컨테이너가 비어있을 때만(최초 1회) 뼈대와 스크립트를 로드합니다.
+    if (container.innerHTML === "") {
+        var thread = document.createElement('div');
+        thread.id = 'cus
