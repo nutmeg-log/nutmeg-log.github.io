@@ -121,6 +121,30 @@ blockquote p:last-child { margin-bottom: 0; }
 .guestList .meta .control { float: right; font-size: 10px; font-family: 'Roboto', 'Nanum Barun Gothic', 'Nanum Gothic'; }
 .guestList .meta .control a, .comment .meta .control a { margin-left: 5px; }
 
+<style>
+/* 1. 디자인 직각화 (기존) */
+:root {
+    --waline-border-radius: 0px !important;
+    --waline-avatar-radius: 0px !important;
+}
+
+/* 2. 하단 'Powered by Waline' 및 정보 숨기기 */
+.wl-footer {
+    display: none !important;
+}
+
+/* 3. ★ 핵심: 댓글 목록 전체 숨기기 ★ */
+.wl-list {
+    display: none !important;
+}
+
+/* 4. 댓글창 상단 구분선 등 추가 정리 */
+.wl-card {
+    border: none !important;
+    box-shadow: none !important;
+}
+</style>
+
 /* 깃허브 Utterances 동적 래퍼 결합 (오리지널 순정 레이아웃 양식) */
 .comment { margin-top: 15px; display: none; }
 .comment ul { margin: 10px 0; padding: 0; text-align: justify; line-height: 1.5em; }
