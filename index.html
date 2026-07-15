@@ -28,7 +28,7 @@ layout: default
             </a>
         </div>
         
-        <!-- 완전 익명 댓글창이 제자리에서 열릴 컨테이너 (adari 스타일) -->
+        <!-- 완전 익명 댓글창이 제자리에서 열릴 컨테이너 -->
         <div id="cusdis-container-{{ forloop.index }}" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
     {% endfor %}
@@ -66,39 +66,7 @@ layout: default
 </div>
 {% endif %}
 
-<!-- Cusdis 스타일 제어 스크립트 -->
 <script>
-// adari.tistory.com의 심플하고 각진 정형화된 댓글창 CSS 정의
-var cusdisCustomCSS = `
-    body { font-family: 'Pretendard', sans-serif !important; font-size: 13px !important; color: #555 !important; }
-    input, textarea { 
-        font-family: 'Pretendard', sans-serif !important; 
-        border: 1px solid #eee !important; 
-        border-radius: 0px !important; /* 모서리 각지게 */
-        background-color: #fff !important; 
-        font-size: 13px !important; 
-        padding: 8px 12px !important;
-        outline: none !important;
-    }
-    input:focus, textarea:focus { border-color: #ccc !important; }
-    button[type="submit"] { 
-        border: 1px solid #eee !important; 
-        border-radius: 0px !important; 
-        background: transparent !important; 
-        color: #555 !important; 
-        font-size: 12px !important; 
-        padding: 6px 15px !important; 
-        cursor: pointer !important;
-        transition: all 0.3s ease !important;
-    }
-    button[type="submit"]:hover { 
-        background: #f7f7f7 !important; 
-        color: #000 !important; 
-    }
-    .cusdis-comment-meta { font-size: 11px !important; color: #aaa !important; }
-    .cusdis-comment-content { font-size: 13px !important; line-height: 1.6 !important; color: #444 !important; }
-`;
-
 function toggleCusdis(event, postTitle, postUrl, containerId) {
     event.preventDefault();
     
@@ -114,14 +82,15 @@ function toggleCusdis(event, postTitle, postUrl, containerId) {
         var thread = document.createElement('div');
         thread.id = 'cusdis_thread';
         thread.setAttribute('data-host', 'https://cusdis.com');
-        thread.setAttribute('data-app-id', '99a4e3fa-79ee-471a-82da-0b8214bc1fc4'); // 대시보드에서 가져오신 ID를 넣어주세요.
+        thread.setAttribute('data-app-id', '99a4e3fa-79ee-471a-82da-0b8214bc1fc4'); // 본인의 Cusdis App ID 유지
         thread.setAttribute('data-page-id', postUrl);
         thread.setAttribute('data-page-url', window.location.origin + postUrl);
         thread.setAttribute('data-page-title', postTitle);
         thread.setAttribute('data-theme', 'light');
         
-        // CSS 주입 기능 사용
-        thread.setAttribute('data-iframe-css', 'data:text/css;base64,' + btoa(unescape(encodeURIComponent(cusdisCustomCSS))));
+        // 오류를 차단하는 브라우저 표준 인코딩 방식으로 CSS 주입
+        var customCSS = "body{font-family:'Pretendard',sans-serif!important;font-size:13px!important;color:#555!important;}input,textarea{font-family:'Pretendard',sans-serif!important;border:1px solid #eee!important;border-radius:0px!important;background-color:#fff!important;font-size:13px!important;padding:8px 12px!important;outline:none!important;}input:focus,textarea:focus{border-color:#ccc!important;}button[type='submit']{border:1px solid #eee!important;border-radius:0px!important;background:transparent!important;color:#555!important;font-size:12px!important;padding:6px 15px!important;cursor:pointer!important;transition:all 0.3s ease!important;}button[type='submit']:hover{background:#f7f7f7!important;color:#000!important;}.cusdis-comment-meta{font-size:11px!important;color:#aaa!important;}.cusdis-comment-content{font-size:13px!important;line-height:1.6!important;color:#444!important;}";
+        thread.setAttribute('data-iframe-css', 'data:text/css;charset=utf-8,' + encodeURIComponent(customCSS));
         
         container.appendChild(thread);
 
