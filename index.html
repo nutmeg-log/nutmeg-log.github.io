@@ -9,40 +9,39 @@ layout: default
             <div class="meta">
                 {% if post.category %}
                 <span class="entryCategory">{{ post.category }}</span>
+                <span class="divider">•</span>
                 {% endif %}
-                <span class="date">{{ post.date | date: "%B %d, %Y" }}</span>
+                <span class="date">{{ post.date | date: "%Y. %m. %d" }}</span>
             </div>
             <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
         </header>
         
         <div class="post-content">
             {% if post.excerpt %}
-                {{ post.excerpt | strip_html | truncatewords: 40 }}
+                {{ post.excerpt | strip_html | truncatewords: 35 }}
             {% else %}
-                {{ post.content | strip_html | truncatewords: 40 }}
+                {{ post.content | strip_html | truncatewords: 35 }}
             {% endif %}
         </div>
         
         <footer class="post-footer">
-            <a href="{{ post.url | append: '#utterances-comments' | relative_url }}" class="comment-link">
-                <i class="fa fa-fw fa-comment"></i> 댓글 보기
-            </a>
+            <a href="{{ post.url | relative_url }}" class="read-more">더보기</a>
         </footer>
     </article>
     {% endfor %}
 </div>
 
-<!-- 티스토리 스타일 페이지네이션 -->
+<!-- 하단 페이지네이션 -->
 {% if paginator.total_pages > 1 %}
 <div class="paging">
     {% if paginator.previous_page %}
         {% if paginator.previous_page == 1 %}
-            <a href="{{ '/' | relative_url }}" class="prev-page"><i class="fa fa-fw fa-angle-left"></i></a>
+            <a href="{{ '/' | relative_url }}" class="prev-page"><i class="fa fa-angle-left"></i></a>
         {% else %}
-            <a href="{{ paginator.previous_page_path | relative_url }}" class="prev-page"><i class="fa fa-fw fa-angle-left"></i></a>
+            <a href="{{ paginator.previous_page_path | relative_url }}" class="prev-page"><i class="fa fa-angle-left"></i></a>
         {% endif %}
     {% else %}
-        <span class="prev-page disabled"><i class="fa fa-fw fa-angle-left"></i></span>
+        <span class="prev-page disabled"><i class="fa fa-angle-left"></i></span>
     {% endif %}
 
     <span class="numbox">
@@ -58,9 +57,9 @@ layout: default
     </span>
 
     {% if paginator.next_page %}
-        <a href="{{ paginator.next_page_path | relative_url }}" class="next-page"><i class="fa fa-fw fa-angle-right"></i></a>
+        <a href="{{ paginator.next_page_path | relative_url }}" class="next-page"><i class="fa fa-angle-right"></i></a>
     {% else %}
-        <span class="next-page disabled"><i class="fa fa-fw fa-angle-right"></i></span>
+        <span class="next-page disabled"><i class="fa fa-angle-right"></i></span>
     {% endif %}
 </div>
 {% endif %}
