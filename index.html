@@ -2,6 +2,15 @@
 layout: default
 ---
 
+<style>
+    /* Waline 댓글창에서 입력창을 제외한 하단 댓글 목록, 카운트 등을 숨깁니다 */
+    .wl-cards,
+    .wl-meta-head,
+    .wl-pagination {
+        display: none !important;
+    }
+</style>
+
 <div class="posts-list">
     {% for post in paginator.posts %}
     <div class="mainElement entry">
@@ -28,15 +37,13 @@ layout: default
             </a>
         </div>
         
-        <!-- Waline 컨테이너 -->
-        <div id="waline-wrapper-{{ forloop.index }}" class="waline-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
+                <div id="waline-wrapper-{{ forloop.index }}" class="waline-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
             <div id="waline-{{ forloop.index }}"></div>
         </div>
     </div>
     {% endfor %}
 </div>
 
-<!-- Waline 초기화 스크립트 -->
 <script type="module">
     import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
 
