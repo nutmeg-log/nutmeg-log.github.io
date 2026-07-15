@@ -27,19 +27,9 @@ layout: default
             </a>
         </div>
         
-        <div id="post-cusdis-root" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
-            <div id="cusdis_thread_detail"
-                 data-host="https://cusdis.com"
-                 data-app-id="99a4e3fa-79ee-471a-82da-0b8214bc1fc4"
-                 data-page-id="{{ page.url }}"
-                 data-page-url="{{ site.url }}{{ page.url }}"
-                 data-page-title="{{ page.title | escape }}">
-            </div>
-        </div>
+        <div id="post-cusdis-root" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
 </div>
-
-<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 
 <script>
 function togglePostCusdis(event) {
@@ -53,22 +43,31 @@ function togglePostCusdis(event) {
         return;
     }
 
+    if (container.innerHTML === "") {
+        var thread = document.createElement('div');
+        thread.id = 'cusdis_thread';
+        thread.setAttribute('data-host', 'https://cusdis.com');
+        thread.setAttribute('data-app-id', '99a4e3fa-79ee-471a-82da-0b8214bc1fc4');
+        thread.setAttribute('data-page-id', '{{ page.url }}');
+        thread.setAttribute('data-page-url', window.location.href);
+        thread.setAttribute('data-page-title', '{{ page.title | escape }}');
+        thread.setAttribute('data-theme', 'light');
+        
+        container.appendChild(thread);
+
+        var script = document.createElement('script');
+        script.src = 'https://cusdis.com/js/cusdis.es.js';
+        script.async = true;
+        script.defer = true;
+        container.appendChild(script);
+    }
+
     container.style.display = "block";
-    
-    setTimeout(function() {
-        if (window.CUSDIS && typeof window.CUSDIS.renderId === 'function') {
-            var threadEl = document.getElementById('cusdis_thread_detail');
-            if (threadEl) {
-                window.CUSDIS.renderId(threadEl);
-            }
-        }
-    }, 50);
 }
 </script>
 
 <style>
-/* 안전한 외부 Style 선언을 통해 adari.tistory.com의 직각 스타일을 강제 구현 */
-.cusdis-wrapper iframe {
+.comment iframe {
     border-radius: 0px !important;
 }
 </style>
