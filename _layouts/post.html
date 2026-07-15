@@ -3,19 +3,17 @@ layout: default
 ---
 
 <style>
-    /* 1. Waline 생성 영역에서 '입력창(.wl-panel)'을 제외한 모든 요소를 통째로 숨깁니다. */
-    .waline-wrapper > div > div:not(.wl-panel) {
-        display: none !important;
-    }
-    
-    /* 2. 말씀하신 정렬(최신순 등), 새로고침을 포함해 알려진 모든 불필요 영역을 이중 차단합니다. */
-    .waline-wrapper .wl-sort,
-    .waline-wrapper .wl-meta-head,
-    .waline-wrapper .wl-count,
-    .waline-wrapper .wl-cards,
-    .waline-wrapper .wl-empty,
-    .waline-wrapper .wl-pagination,
-    .waline-wrapper .wl-power {
+    /* Waline v3의 하단 목록, 정렬(최신순/인기순), 새로고침 등을 구성하는 모든 영역을 안전하게 숨깁니다. */
+    .waline-wrapper .wl-header,        /* 헤더 영역 (새로고침, 정렬 등 포함) */
+    .waline-wrapper .wl-list-header,   /* v3 목록 헤더 */
+    .waline-wrapper .wl-meta-head,     /* 메타 헤더 */
+    .waline-wrapper .wl-sort,          /* 최신순, 오래된순, 인기순 */
+    .waline-wrapper .wl-refresh,       /* 새로고침 버튼 */
+    .waline-wrapper .wl-count,         /* 댓글 개수 */
+    .waline-wrapper .wl-cards,         /* 실제 댓글 목록 */
+    .waline-wrapper .wl-empty,         /* '댓글이 없습니다' 텍스트 */
+    .waline-wrapper .wl-pagination,    /* 페이지네이션 */
+    .waline-wrapper .wl-power {        /* Powered by Waline */
         display: none !important;
     }
 </style>
