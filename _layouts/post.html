@@ -3,23 +3,19 @@ layout: default
 ---
 
 <style>
-    /* CSS 특수성을 최대로 높여 Waline 기본 스타일이 덮어쓰지 못하도록 강제 차단합니다. */
-    body .posts-list .waline-wrapper .wl-meta-head,
-    body .posts-list .waline-wrapper .wl-header,
-    body .posts-list .waline-wrapper .wl-sort,
-    body .posts-list .waline-wrapper .wl-refresh,
-    body .posts-list .waline-wrapper button[title="새로고침"],
-    body .posts-list .waline-wrapper .wl-count,
-    body .posts-list .waline-wrapper .wl-cards,
-    body .posts-list .waline-wrapper .wl-empty,
-    body .posts-list .waline-wrapper .wl-pagination,
-    body .posts-list .waline-wrapper .wl-power {
+    /* 1차 방어: 전역(Global) 설정으로 이름에 해당 단어가 포함된 모든 요소를 차단합니다. */
+    [class*="wl-meta-head"],
+    [class*="wl-sort"],
+    [class*="wl-refresh"],
+    [class*="wl-cards"],
+    [class*="wl-power"],
+    [class*="wl-empty"],
+    [class*="wl-pagination"],
+    [class*="wl-count"],
+    [title*="새로고침"] {
         display: none !important;
-        visibility: hidden !important;
         opacity: 0 !important;
-        height: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
+        visibility: hidden !important;
         pointer-events: none !important;
     }
 </style>
@@ -78,6 +74,21 @@ layout: default
                     noRss: true        
                 });
                 container.dataset.initialized = 'true';
+                
+                // 2차 방어 (최후의 수단): 화면에 '새로고침', '최신순' 등이 렌더링되는 즉시 JS로 강제 삭제합니다.
+                const targetNode = document.getElementById('post-waline');
+                if (targetNode) {
+                    const observer = new MutationObserver(() => {
+                        const elementsToHide = targetNode.querySelectorAll(
+                            '.wl-meta-head, .wl-sort, .wl-refresh, .wl-cards, .wl-power, .wl-empty, .wl-count, button[title="새로고침"], button[title="Refresh"]'
+                        );
+                        elementsToHide.forEach(el => {
+                            el.style.setProperty('display', 'none', 'important');
+                        });
+                    });
+                    // 요소 변경을 실시간으로 감시합니다.
+                    observer.observe(targetNode, { childList: true, subtree: true });
+                }
             }
         }
     };
