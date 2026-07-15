@@ -1,0 +1,11 @@
+# 블로그 기본 설정
+title: "블로그 이름"
+description: "블로그 한 줄 소개"
+
+# 페이징 설정 (한 페이지에 글 5개씩 노출)
+paginate: 5
+paginate_path: "/page:num/"
+
+# 플러그인 활성화
+plugins:
+  - jekyll-paginate
