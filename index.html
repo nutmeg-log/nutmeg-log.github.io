@@ -28,8 +28,8 @@ layout: default
             </a>
         </div>
         
-        <!-- 완전 익명 댓글창이 제자리에서 열릴 컨테이너 -->
-        <div id="cusdis-container-{{ forloop.index }}" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <!-- 클래스명을 고유값(cusdis-wrapper)으로 변경하여 기존 CSS display:none 강제 적용 충돌 해결 -->
+        <div id="cusdis-container-{{ forloop.index }}" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
     {% endfor %}
 </div>
@@ -87,9 +87,6 @@ function toggleCusdis(event, postTitle, postUrl, containerId) {
         thread.setAttribute('data-page-url', window.location.origin + postUrl);
         thread.setAttribute('data-page-title', postTitle);
         thread.setAttribute('data-theme', 'light');
-        
-        // 지킬 템플릿과 충돌을 방지하기 위해, 원격 호스팅된 라이트 테마 CSS를 지정
-        // Cusdis 내부 입력 폼을 가장 심플하고 깔끔하게 렌더링해주는 기본 주소 방식입니다.
         thread.setAttribute('data-iframe-css', 'https://cusdis.com/js/style.css');
         
         container.appendChild(thread);
