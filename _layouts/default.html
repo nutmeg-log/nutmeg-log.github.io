@@ -5,47 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
 
-    <link rel="stylesheet" href="https://nutmeg-log.github.io/assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 <body>
-    <div id="container">
-        <div id="wrap">
-            <div id="sidebar">
-                <ul id="menu">
-                    <li><a href="{{ '/' | relative_url }}"><i class="fa fa-fw fa-bars"></i><span>View All</span></a></li>
-                    <li><a href="{{ '/category/memo/' | relative_url }}"><i class="fa fa-fw fa-pencil"></i><span>Memo</span></a></li>
-                    <li><a href="{{ '/category/movie/' | relative_url }}"><i class="fa fa-fw fa-star"></i><span>Movie</span></a></li>
-                    <li><a href="{{ '/tags/' | relative_url }}"><i class="fa fa-fw fa-tag"></i><span>Tag</span></a></li>
-                    <li><a href="{{ '/guestbook/' | relative_url }}"><i class="fa fa-fw fa-heart"></i><span>Guestbook</span></a></li>
-                </ul>
-                
-                <div class="search-box">
-    <div class="search-container">
-        <i class="fa fa-search"></i>
-        <input type="text" id="search-input" placeholder="검색...">
-    </div>
-    <ul id="results-container"></ul>
-                </div>
 
-            <div id="content">
-                {{ content }}
-            </div>
-        </div>
-
-        <div id="footer">
-            <span class="top" onclick="window.scrollTo(0,0);" style="cursor:pointer;">Top</span>
-            <p class="copyright">
-                <a href="{{ '/' | relative_url }}">{{ site.title }}</a><br>
-                Skin by Ena / Converted to Jekyll
-            </p>
-        </div>
+<div id="container">
+    <div id="sidebar">
+        <ul id="menu">
+            <li><a href="{{ '/' | relative_url }}"><i class="fa fa-fw fa-bars"></i><span>View All</span></a></li>
+            <li><a href="{{ '/category/memo/' | relative_url }}"><i class="fa fa-fw fa-pencil"></i><span>Memo</span></a></li>
+            <li><a href="{{ '/category/movie/' | relative_url }}"><i class="fa fa-fw fa-star"></i><span>Movie</span></a></li>
+            <li><a href="{{ '/tags/' | relative_url }}"><i class="fa fa-fw fa-tag"></i><span>Tag</span></a></li>
+            <li><a href="{{ '/guestbook/' | relative_url }}"><i class="fa fa-fw fa-heart"></i><span>Guestbook</span></a></li>
+        </ul>
         
-    </div> 
+        <div class="search-box">
+            <div class="search-container">
+                <i class="fa fa-search"></i>
+                <input type="text" id="search-input" placeholder="검색...">
+            </div>
+            <ul id="results-container"></ul>
+        </div>
+    </div>
+
+    <div id="content">
+        {{ content }}
+    </div>
+
+    <div id="footer">
+        <span class="top" onclick="window.scrollTo(0,0);" style="cursor:pointer;">Top</span>
+        <p class="copyright">
+            <a href="{{ '/' | relative_url }}">{{ site.title }}</a><br>
+            Skin by Ena / Converted to Jekyll
+        </p>
+    </div>
+</div> 
+
 </body>
 </html>
