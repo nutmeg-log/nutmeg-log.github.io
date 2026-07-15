@@ -23,13 +23,22 @@ layout: default
         
         <div class="actionTrail" style="cursor: pointer;">
             <i class="fa fa-fw fa-comment"></i> 
-            <a href="#" onclick="toggleCusdis(event, '{{ post.title | escape }}', '{{ post.url | relative_url }}', 'cusdis-container-{{ forloop.index }}')">
+            <a href="#" onclick="toggleCusdis(event, 'cusdis-container-{{ forloop.index }}')">
                 <span class="cnt">comment</span>
             </a>
         </div>
         
-        <!-- 클래스명을 고유값(cusdis-wrapper)으로 변경하여 기존 CSS display:none 강제 적용 충돌 해결 -->
-        <div id="cusdis-container-{{ forloop.index }}" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <!-- 처음부터 thread 뼈대를 안전하게 렌더링하고, display: none 상태로 준비해둡니다 -->
+        <div id="cusdis-container-{{ forloop.index }}" class="cusdis-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
+            <div id="cusdis_thread"
+                 data-host="https://cusdis.com"
+                 data-app-id="99a4e3fa-79ee-471a-82da-0b8214bc1fc4"
+                 data-page-id="{{ post.url | relative_url }}"
+                 data-page-url="{{ site.url }}{{ post.url | relative_url }}"
+                 data-page-title="{{ post.title | escape }}"
+                 data-theme="light">
+            </div>
+        </div>
     </div>
     {% endfor %}
 </div>
@@ -66,8 +75,10 @@ layout: default
 </div>
 {% endif %}
 
+<!-- 최초 로딩 시점에서 전역 Cusdis 스크립트 한 번만 안전하게 주입 -->
+<script async defer src="https://cusdis.com/js/cusdis.es.js"></script>
 <script>
-function toggleCusdis(event, postTitle, postUrl, containerId) {
+function toggleCusdis(event, containerId) {
     event.preventDefault();
     
     var container = document.getElementById(containerId);
@@ -75,29 +86,15 @@ function toggleCusdis(event, postTitle, postUrl, containerId) {
 
     if (container.style.display === "block") {
         container.style.display = "none";
-        return;
+    } else {
+        container.style.display = "block";
+        // 이미 생성된 프레임이 깨지지 않도록 강제 리사이즈 유도 트리거 실행
+        if (window.CUSDIS && typeof window.CUSDIS.renderId === 'function') {
+            var threadEl = container.querySelector('#cusdis_thread');
+            if (threadEl) {
+                window.CUSDIS.renderId(threadEl);
+            }
+        }
     }
-
-    if (container.innerHTML === "") {
-        var thread = document.createElement('div');
-        thread.id = 'cusdis_thread';
-        thread.setAttribute('data-host', 'https://cusdis.com');
-        thread.setAttribute('data-app-id', '99a4e3fa-79ee-471a-82da-0b8214bc1fc4');
-        thread.setAttribute('data-page-id', postUrl);
-        thread.setAttribute('data-page-url', window.location.origin + postUrl);
-        thread.setAttribute('data-page-title', postTitle);
-        thread.setAttribute('data-theme', 'light');
-        thread.setAttribute('data-iframe-css', 'https://cusdis.com/js/style.css');
-        
-        container.appendChild(thread);
-
-        var script = document.createElement('script');
-        script.src = 'https://cusdis.com/js/cusdis.es.js';
-        script.async = true;
-        script.defer = true;
-        container.appendChild(script);
-    }
-
-    container.style.display = "block";
 }
 </script>
