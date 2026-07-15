@@ -2,32 +2,32 @@
 <html lang="ko">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ site.title }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
 </head>
 <body>
     <div id="container">
-        <div id="sidebar">
-            <ul id="menu">
-                <li><a href="/"><i class="fa fa-bars"></i> View All</a></li>
-                <li><a href="/category/memo/"><i class="fa fa-pencil"></i> Memo</a></li>
-                <li><a href="/category/movie/"><i class="fa fa-star"></i> Movie</a></li>
-                <li><a href="/tags/"><i class="fa fa-tag"></i> Tag</a></li>
-            </ul>
+        <aside id="sidebar">
+            <h1 class="blog-title"><a href="/">Nutmeg Log</a></h1>
+            <nav id="menu">
+                <ul>
+                    <li><a href="/"><i class="fa fa-bars"></i> View All</a></li>
+                    <li><a href="/category/memo/"><i class="fa fa-pencil"></i> Memo</a></li>
+                    <li><a href="/category/movie/"><i class="fa fa-star"></i> Movie</a></li>
+                </ul>
+            </nav>
             <div class="search-box">
                 <div class="search-container">
                     <i class="fa fa-search"></i>
                     <input type="text" id="search-input" placeholder="검색...">
                 </div>
             </div>
-        </div>
-        <div id="content">
+        </aside>
+        <main id="content">
             {{ content }}
-        </div>
-        <div id="footer">
-            <p>&copy; 2026 {{ site.title }} | Skin by Ena</p>
-        </div>
+        </main>
     </div>
 </body>
 </html>
