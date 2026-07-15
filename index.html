@@ -33,7 +33,7 @@ layout: default
                  data-host="https://cusdis.com"
                  data-app-id="99a4e3fa-79ee-471a-82da-0b8214bc1fc4"
                  data-page-id="{{ post.url | relative_url }}"
-                 data-page-url="{{ post.url | relative_url }}"
+                 data-page-url="{{ site.url }}{{ post.url | relative_url }}"
                  data-page-title="{{ post.title | escape }}">
             </div>
         </div>
@@ -89,16 +89,10 @@ function toggleCusdis(event, index) {
 
     container.style.display = "block";
     
-    // [교정] 브라우저가 display: block 공간을 완전히 확보한 직후(1프레임 뒤) 안전하게 렌더링을 지시합니다.
     setTimeout(function() {
         if (window.CUSDIS && typeof window.CUSDIS.renderId === 'function') {
             var threadEl = document.getElementById('cusdis_thread_' + index);
             if (threadEl) {
-                // 망가진 상대경로 URL 속성을 정상적인 절대 경로 풀 주소로 실시간 치환하여 전달
-                var relUrl = threadEl.getAttribute('data-page-url');
-                if (relUrl && !relUrl.startsWith('http')) {
-                    threadEl.setAttribute('data-page-url', window.location.origin + relUrl);
-                }
                 window.CUSDIS.renderId(threadEl);
             }
         }
@@ -107,6 +101,7 @@ function toggleCusdis(event, index) {
 </script>
 
 <style>
+/* 안전한 외부 Style 선언을 통해 adari.tistory.com의 직각 스타일을 강제 구현 */
 .cusdis-wrapper iframe {
     border-radius: 0px !important;
 }
