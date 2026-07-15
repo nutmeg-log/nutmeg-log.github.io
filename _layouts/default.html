@@ -9,17 +9,17 @@
     <link href="https://cdn.jsdelivr.net/gh/sunn-us/SUIT/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- CSS 파일 연결 (캐시 방지 파라미터 적용) -->
+    <!-- 캐시 방지 파라미터 적용하여 style.css 연결 -->
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%Y%m%d%H%M%S' }}">
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 <body>
 
 <div id="container">
-    <!-- 상단 헤더 영역 (티스토리 스타일의 미니멀 로고 및 가로 메뉴) -->
-    <header id="header">
-        <h1 class="blog-title"><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
-        <nav id="top-menu">
+    <!-- 1. 왼쪽 사이드바 영역 -->
+    <aside id="sidebar">
+        <h1 class="blog-title"><a href="{{ '/' | relative_url }}">Nutmeg Log</a></h1>
+        <nav id="menu">
             <ul>
                 <li><a href="{{ '/' | relative_url }}"><i class="fa fa-bars"></i> <span>View All</span></a></li>
                 <li><a href="{{ '/category/memo/' | relative_url }}"><i class="fa fa-pencil"></i> <span>Memo</span></a></li>
@@ -27,15 +27,8 @@
                 <li><a href="{{ '/tags/' | relative_url }}"><i class="fa fa-tag"></i> <span>Tag</span></a></li>
             </ul>
         </nav>
-    </header>
-
-    <!-- 메인 본문 콘텐츠 영역 (1단 중앙 정렬) -->
-    <main id="content">
-        {{ content }}
-    </main>
-
-    <!-- 하단 영역 (티스토리형 밑줄 검색창 + 푸터) -->
-    <footer id="footer">
+        
+        <!-- 사이드바 내부에 포함된 검색창 -->
         <div class="search-box">
             <div class="search-container">
                 <i class="fa fa-search"></i>
@@ -43,15 +36,24 @@
             </div>
             <ul id="results-container"></ul>
         </div>
-        
-        <div class="footer-meta">
-            <span class="top" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" style="cursor:pointer;">Top</span>
-            <p class="copyright">
-                <a href="{{ '/' | relative_url }}">{{ site.title }}</a><br>
-                Skin by Ena / Converted to Jekyll
-            </p>
-        </div>
-    </footer>
+    </aside>
+
+    <!-- 2. 오른쪽 본문 영역 (본문 + 하단 푸터 통합) -->
+    <div id="content-wrapper">
+        <main id="content">
+            {{ content }}
+        </main>
+
+        <!-- 우측 하단 푸터 영역 (댓글창 밑에 아주 깔끔하게 안착) -->
+        <footer id="footer">
+            <div class="footer-meta">
+                <span class="top" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" style="cursor:pointer;">Top</span>
+                <p class="copyright">
+                    <a href="{{ '/' | relative_url }}">{{ site.title }}</a>. Powered by Jekyll
+                </p>
+            </div>
+        </footer>
+    </div>
 </div> 
 
 </body>
