@@ -22,20 +22,20 @@ layout: default
         
         <div class="actionTrail" style="cursor: pointer;">
             <i class="fa fa-fw fa-comment"></i> 
-            <a href="#" onclick="togglePostComments(event)">
+            <a href="#" onclick="togglePostGiscus(event)">
                 <span class="cnt">comment</span>
             </a>
         </div>
         
-        <div id="post-comments-root" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <div id="post-giscus-root" class="comment" style="margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
 </div>
 
 <script>
-function togglePostComments(event) {
-    event.preventDefault(); // 클릭 시 페이지가 위로 튀는 현상 방지
+function togglePostGiscus(event) {
+    event.preventDefault();
     
-    var container = document.getElementById('post-comments-root');
+    var container = document.getElementById('post-giscus-root');
     if (!container) return;
 
     if (container.style.display === "block") {
@@ -45,12 +45,22 @@ function togglePostComments(event) {
 
     if (container.innerHTML === "") {
         var script = document.createElement('script');
-        script.setAttribute('src', 'https://utteranc.es/client.js');
-        script.setAttribute('repo', 'nutmeg-log/nutmeg-log.github.io'); // 사용자의 github 저장소 매칭
-        script.setAttribute('issue-term', '{{ page.title | escape }}'); // 포스트 제목 기준 매칭
-        script.setAttribute('theme', 'github-light');
+        script.setAttribute('src', 'https://giscus.app/client.js');
+        script.setAttribute('data-repo', 'nutmeg-log/nutmeg-log.github.io');
+        script.setAttribute('data-repo-id', 'R_kgDONG641g');
+        script.setAttribute('data-category', 'Announcements');
+        script.setAttribute('data-category-id', 'DIC_kwDONG641s4CkWzB');
+        script.setAttribute('data-mapping', 'specific');
+        script.setAttribute('data-term', '{{ page.title | escape }}');
+        script.setAttribute('data-strict', '0');
+        script.setAttribute('data-reactions-enabled', '1');
+        script.setAttribute('data-emit-metadata', '0');
+        script.setAttribute('data-input-position', 'top');
+        script.setAttribute('data-theme', 'light');
+        script.setAttribute('data-lang', 'ko');
         script.setAttribute('crossorigin', 'anonymous');
         script.setAttribute('async', 'true');
+        
         container.appendChild(script);
     }
 
