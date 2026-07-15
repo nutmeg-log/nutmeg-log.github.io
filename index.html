@@ -23,13 +23,13 @@ layout: default
         
         <div class="actionTrail" style="cursor: pointer;">
             <i class="fa fa-fw fa-comment"></i> 
-            <a href="#" onclick="toggleGiscus(event, '{{ post.title | escape }}', 'giscus-container-{{ forloop.index }}')">
+            <a href="#" onclick="toggleCusdis(event, '{{ post.title | escape }}', '{{ post.url | relative_url }}', 'cusdis-container-{{ forloop.index }}')">
                 <span class="cnt">comment</span>
             </a>
         </div>
         
-        <!-- 익명 댓글창이 제자리에서 열릴 컨테이너 -->
-        <div id="giscus-container-{{ forloop.index }}" class="comment" style="margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
+        <!-- 완전 익명 댓글창이 제자리에서 열릴 컨테이너 (adari 스타일) -->
+        <div id="cusdis-container-{{ forloop.index }}" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;"></div>
     </div>
     {% endfor %}
 </div>
@@ -66,10 +66,10 @@ layout: default
 </div>
 {% endif %}
 
-<!-- giscus 익명 댓글 토글 스크립트 -->
+<!-- Cusdis 동적 익명댓글 로딩 및 토글 제어 스크립트 -->
 <script>
-function toggleGiscus(event, postTitle, containerId) {
-    event.preventDefault();
+function toggleCusdis(event, postTitle, postUrl, containerId) {
+    event.preventDefault(); // 상단 바운스 방지
     
     var container = document.getElementById(containerId);
     if (!container) return;
@@ -80,23 +80,23 @@ function toggleGiscus(event, postTitle, containerId) {
     }
 
     if (container.innerHTML === "") {
-        var script = document.createElement('script');
-        script.setAttribute('src', 'https://giscus.app/client.js');
-        script.setAttribute('data-repo', 'nutmeg-log/nutmeg-log.github.io');
-        script.setAttribute('data-repo-id', 'R_kgDONG641g');
-        script.setAttribute('data-category', 'Announcements');
-        script.setAttribute('data-category-id', 'DIC_kwDONG641s4CkWzB');
-        script.setAttribute('data-mapping', 'specific');
-        script.setAttribute('data-term', postTitle);
-        script.setAttribute('data-strict', '0');
-        script.setAttribute('data-reactions-enabled', '0'); // 이모지 반응 기능 완전 비활성화 (0)
-        script.setAttribute('data-emit-metadata', '0');
-        script.setAttribute('data-input-position', 'top');
-        script.setAttribute('data-theme', 'light');
-        script.setAttribute('data-lang', 'ko');
-        script.setAttribute('crossorigin', 'anonymous');
-        script.setAttribute('async', 'true');
+        // Cusdis에 필요한 규격에 맞게 뼈대 태그 동적 생성
+        var thread = document.createElement('div');
+        thread.id = 'cusdis_thread';
+        thread.setAttribute('data-host', 'https://cusdis.com');
+        thread.setAttribute('data-app-id', 'bafad7eb-3b56-49d3-92de-f0212c4d5091'); // 발급받은 36자리 ID 입력
+        thread.setAttribute('data-page-id', postUrl);
+        thread.setAttribute('data-page-url', window.location.origin + postUrl);
+        thread.setAttribute('data-page-title', postTitle);
+        thread.setAttribute('data-theme', 'light');
         
+        container.appendChild(thread);
+
+        // Cusdis 초경량 스크립트 동적 주입 및 실행
+        var script = document.createElement('script');
+        script.src = 'https://cusdis.com/js/cusdis.es.js';
+        script.async = true;
+        script.defer = true;
         container.appendChild(script);
     }
 
