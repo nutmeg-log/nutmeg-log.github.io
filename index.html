@@ -3,14 +3,12 @@ layout: default
 ---
 
 <style>
-    /* Waline 댓글창에서 입력창(wl-panel)만 남기고 나머지 모든 요소를 강제로 숨깁니다 */
-    .wl-cards,       /* 댓글 목록 */
-    .wl-count,       /* 댓글 개수, 새로고침, 피드 버튼이 포함된 영역 */
-    .wl-meta-head,   /* 메타 정보 헤더 */
-    .wl-header,      /* 구버전 헤더 영역 */
-    .wl-pagination,  /* 페이지네이션 */
-    .wl-empty,       /* '댓글이 없습니다' 등의 빈 상태 텍스트 */
-    .wl-power        /* Powered by Waline 텍스트 */ {
+    /* CSS 우선순위를 높이기 위해 최상위 래퍼(.waline-wrapper)를 지정하여 내부 요소를 강제 숨김 처리합니다. */
+    .waline-wrapper .wl-meta-head,   /* 새로고침, 댓글 개수, 정렬 등 헤더 전체 */
+    .waline-wrapper .wl-cards,       /* 댓글 목록 전체 */
+    .waline-wrapper .wl-empty,       /* '댓글이 없습니다' 텍스트 */
+    .waline-wrapper .wl-pagination,  /* 페이지네이션 */
+    .waline-wrapper .wl-power        /* Powered by Waline (보조 숨김) */ {
         display: none !important;
     }
 </style>
@@ -70,7 +68,9 @@ layout: default
                     path: path,
                     emoji: false,
                     requiredMeta: ['nick'],
-                    login: 'disable'
+                    login: 'disable',
+                    noCopyright: true, // v3 공식 옵션: 'Powered by Waline' 생성 차단
+                    noRss: true        // v3 공식 옵션: RSS 피드 버튼 생성 차단
                 });
                 container.dataset.initialized = 'true';
             }
