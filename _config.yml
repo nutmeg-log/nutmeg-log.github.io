@@ -1,6 +1,5 @@
 # 블로그 기본 설정
 title: "nutmeg-log"
-theme: jekyll-theme-minimal
 description: "블로그 한 줄 소개"
 
 # 페이징 설정 (한 페이지에 글 5개씩 노출)
