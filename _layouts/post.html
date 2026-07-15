@@ -3,74 +3,78 @@ layout: default
 ---
 
 <div class="posts-list">
+    {% for post in paginator.posts %}
     <div class="mainElement entry">
         <div class="titleWrap">
-            <h2>{{ page.title }}</h2>
+            <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
             <div class="meta">
-                {% if page.category %}
-                <a class="entryCategory" href="{{ site.baseurl }}/category/{{ page.category | slugify }}">{{ page.category }}</a> 
+                {% if post.category %}
+                <a class="entryCategory" href="{{ post.url | relative_url }}">{{ post.category }}</a> 
                 {% endif %}
                 <span class="date">
-                    {{ page.date | date: "%B %d, %Y" }}
+                    {{ post.date | date: "%B %d, %Y" }}
                 </span>
             </div>
         </div>
         
         <div class="article">
-            {{ content }}
+            {{ post.content }}
         </div>
         
-        <!-- 댓글 토글 버튼 -->
+        <!-- Waline 댓글 토글 버튼 -->
         <div class="actionTrail" style="cursor: pointer;">
             <i class="fa fa-fw fa-comment"></i> 
-            <a href="#" onclick="toggleWaline(event)">
+            <a href="#" onclick="toggleWaline(event, 'waline-{{ forloop.index }}', '{{ post.url | relative_url }}')">
                 <span class="cnt">comment</span>
             </a>
         </div>
         
-        <!-- Waline 댓글창 컨테이너 (초기엔 숨김) -->
-        <div id="waline-container" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
-            <div id="waline"></div>
+        <!-- Waline이 들어갈 컨테이너 -->
+        <div id="waline-container-{{ forloop.index }}" class="comment" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
+            <div id="waline-{{ forloop.index }}"></div>
         </div>
     </div>
+    {% endfor %}
 </div>
 
-<!-- Waline 스크립트 및 CSS -->
-<link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+<!-- 나머지 페이징 코드는 그대로 유지하세요 -->
 
 <script type="module">
     import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
 
-    // Waline 초기화
-    init({
-        el: '#waline',
-        serverURL: '여기에_방금_복사한_Vercel_도메인_주소를_넣으세요', // 예: https://nutmeg-blog.vercel.app
-        emoji: false,
-        requiredMeta: ['nick'],
-        login: 'disable' // 익명 댓글 허용
-    });
-
-    // 기존 토글 기능을 활용한 표시/숨김 함수
-    window.toggleWaline = function(event) {
+    window.toggleWaline = function(event, containerId, path) {
         event.preventDefault();
-        var container = document.getElementById('waline-container');
-        if (!container) return;
-
+        var container = document.getElementById('waline-container-' + containerId.split('-')[1]);
+        
         if (container.style.display === "block") {
             container.style.display = "none";
-        } else {
-            container.style.display = "block";
+            return;
+        }
+
+        // 다른 모든 창 닫기
+        document.querySelectorAll('.comment').forEach(el => el.style.display = "none");
+        
+        // 열기
+        container.style.display = "block";
+
+        // Waline 초기화 (아직 안 되어 있다면 실행)
+        var targetEl = document.getElementById(containerId);
+        if (targetEl.innerHTML === "") {
+            init({
+                el: '#' + containerId,
+                serverURL: '여기에_방금_복사한_Vercel_도메인_주소를_넣으세요',
+                path: path,
+                emoji: false,
+                login: 'disable'
+            });
         }
     };
 </script>
 
 <style>
-/* adari.tistory.com 스타일 유지: 직각 모서리 강제 적용 */
 :root {
     --waline-border-radius: 0px !important;
     --waline-avatar-radius: 0px !important;
 }
-.comment {
-    border-radius: 0px !important;
-}
+.comment { border-radius: 0px !important; }
 </style>
