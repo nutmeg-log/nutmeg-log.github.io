@@ -2,24 +2,6 @@
 layout: default
 ---
 
-<style>
-    /* 1차 방어: 전역(Global) 설정으로 이름에 해당 단어가 포함된 모든 요소를 차단합니다. */
-    [class*="wl-meta-head"],
-    [class*="wl-sort"],
-    [class*="wl-refresh"],
-    [class*="wl-cards"],
-    [class*="wl-power"],
-    [class*="wl-empty"],
-    [class*="wl-pagination"],
-    [class*="wl-count"],
-    [title*="새로고침"] {
-        display: none !important;
-        opacity: 0 !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
-    }
-</style>
-
 <div class="posts-list">
     <div class="mainElement entry">
         <div class="titleWrap">
@@ -38,58 +20,22 @@ layout: default
             {{ content }}
         </div>
         
-        <div class="actionTrail" style="cursor: pointer;">
-            <i class="fa fa-fw fa-comment"></i> 
-            <a href="#" onclick="togglePostWaline(event, '{{ page.url | relative_url }}')">
-                <span class="cnt">comment</span>
-            </a>
+        <div class="comments-wrapper" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
+            <script src="https://giscus.app/client.js"
+                    data-repo="[ENTER REPO HERE]"
+                    data-repo-id="[ENTER REPO ID HERE]"
+                    data-category="[ENTER CATEGORY HERE]"
+                    data-category-id="[ENTER CATEGORY ID HERE]"
+                    data-mapping="pathname"
+                    data-strict="0"
+                    data-reactions-enabled="1"
+                    data-emit-metadata="0"
+                    data-input-position="bottom"
+                    data-theme="preferred_color_scheme"
+                    data-lang="ko"
+                    crossorigin="anonymous"
+                    async>
+            </script>
         </div>
-        
-        <div id="post-waline-wrapper" class="waline-wrapper" style="display: none; margin-top: 20px; padding: 20px 0; border-top: 1px solid #eee;">
-            <div id="post-waline"></div>
         </div>
-    </div>
 </div>
-
-<script type="module">
-    import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
-
-    window.togglePostWaline = function(event, path) {
-        event.preventDefault();
-        var container = document.getElementById('post-waline-wrapper');
-        
-        if (container.style.display === "block") {
-            container.style.display = "none";
-        } else {
-            container.style.display = "block";
-            if (!container.dataset.initialized) {
-                init({
-                    el: '#post-waline',
-                    serverURL: 'https://nutmeg-eight.vercel.app',
-                    path: path,
-                    emoji: false,
-                    requiredMeta: ['nick'],
-                    login: 'disable',
-                    noCopyright: true, 
-                    noRss: true        
-                });
-                container.dataset.initialized = 'true';
-                
-                // 2차 방어 (최후의 수단): 화면에 '새로고침', '최신순' 등이 렌더링되는 즉시 JS로 강제 삭제합니다.
-                const targetNode = document.getElementById('post-waline');
-                if (targetNode) {
-                    const observer = new MutationObserver(() => {
-                        const elementsToHide = targetNode.querySelectorAll(
-                            '.wl-meta-head, .wl-sort, .wl-refresh, .wl-cards, .wl-power, .wl-empty, .wl-count, button[title="새로고침"], button[title="Refresh"]'
-                        );
-                        elementsToHide.forEach(el => {
-                            el.style.setProperty('display', 'none', 'important');
-                        });
-                    });
-                    // 요소 변경을 실시간으로 감시합니다.
-                    observer.observe(targetNode, { childList: true, subtree: true });
-                }
-            }
-        }
-    };
-</script>
